@@ -20,6 +20,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { LuSettings } from "react-icons/lu";
 import { PiSignOutBold } from "react-icons/pi";
+import Link from "next/link";
 
 export function AppSidebar() {
   return (
@@ -39,7 +40,9 @@ export function AppSidebar() {
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Upcoming</SidebarMenuButton>
+                  <SidebarMenuButton>
+                    <Link href="/upcoming">Upcoming</Link>
+                  </SidebarMenuButton>
                   <SidebarMenuBadge>4</SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
