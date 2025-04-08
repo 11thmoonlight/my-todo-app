@@ -24,7 +24,7 @@ export default function Upcoming() {
         <div className="flex flex-col ml-[20px] gap-2">
           <div className="flex items-center justify-between ">
             <div className="flex gap-2 items-center">
-              <MdOutlineCheckBoxOutlineBlank />
+              <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
               <span>Research content ideas</span>
             </div>
             <TaskSheet />
@@ -54,7 +54,7 @@ export default function Upcoming() {
         <div className="flex flex-col ml-[20px] gap-3">
           <div className="flex items-center justify-between ">
             <div className="flex gap-2 items-center">
-              <MdOutlineCheckBoxOutlineBlank />
+              <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
               <span>Research content ideas</span>
             </div>
             <IoChevronForwardOutline />
@@ -91,7 +91,7 @@ export default function Upcoming() {
           <div className="flex flex-col ml-[20px] gap-2">
             <div className="flex items-center justify-between ">
               <div className="flex gap-2 items-center">
-                <MdOutlineCheckBoxOutlineBlank />
+                <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
                 <span>Research content ideas</span>
               </div>
               <IoChevronForwardOutline />
@@ -121,7 +121,7 @@ export default function Upcoming() {
           <div className="flex flex-col ml-[20px] gap-3">
             <div className="flex items-center justify-between ">
               <div className="flex gap-2 items-center">
-                <MdOutlineCheckBoxOutlineBlank />
+                <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
                 <span>Research content ideas</span>
               </div>
               <IoChevronForwardOutline />
@@ -157,7 +157,7 @@ export default function Upcoming() {
           <div className="flex flex-col ml-[20px] gap-2">
             <div className="flex items-center justify-between ">
               <div className="flex gap-2 items-center">
-                <MdOutlineCheckBoxOutlineBlank />
+                <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
                 <span>Research content ideas</span>
               </div>
               <IoChevronForwardOutline />
@@ -187,7 +187,7 @@ export default function Upcoming() {
           <div className="flex flex-col ml-[20px] gap-3">
             <div className="flex items-center justify-between ">
               <div className="flex gap-2 items-center">
-                <MdOutlineCheckBoxOutlineBlank />
+                <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
                 <span>Research content ideas</span>
               </div>
               <IoChevronForwardOutline />

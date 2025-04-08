@@ -21,39 +21,59 @@ import { ChevronDown } from "lucide-react";
 import { LuSettings } from "react-icons/lu";
 import { PiSignOutBold } from "react-icons/pi";
 import Link from "next/link";
+import { MdDoubleArrow } from "react-icons/md";
+import { FaListCheck } from "react-icons/fa6";
+import { LuCalendarDays } from "react-icons/lu";
+import { LuStickyNote } from "react-icons/lu";
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { IoMdAdd } from "react-icons/io";
 
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="text-violet-900">
         <span className="font-semibold text-lg">Menu</span>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="text-violet-900">
         <SidebarMenu className="overflow-hidden">
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild>
-                <CollapsibleTrigger className="">
+                <CollapsibleTrigger className="text-violet-950">
                   TASKS
                   <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>
+                  <SidebarMenuButton className="flex gap-2">
+                    <MdDoubleArrow />
                     <Link href="/upcoming">Upcoming</Link>
                   </SidebarMenuButton>
-                  <SidebarMenuBadge>4</SidebarMenuBadge>
+                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
+                    4
+                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Today</SidebarMenuButton>
-                  <SidebarMenuBadge>4</SidebarMenuBadge>
+                  <SidebarMenuButton>
+                    <FaListCheck />
+                    Today
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
+                    4
+                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Calender</SidebarMenuButton>
+                  <SidebarMenuButton>
+                    <LuCalendarDays />
+                    Calendar
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Sticky Wall</SidebarMenuButton>
+                  <SidebarMenuButton>
+                    <LuStickyNote />
+                    Sticky Wall
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               </CollapsibleContent>
             </SidebarGroup>
@@ -64,22 +84,39 @@ export function AppSidebar() {
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild>
-                <CollapsibleTrigger>
+                <CollapsibleTrigger className="text-violet-950">
                   LISTS
                   <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Personal</SidebarMenuButton>
-                  <SidebarMenuBadge>4</SidebarMenuBadge>
+                  <SidebarMenuButton>
+                    <div className="flex gap-2 items-center">
+                      <MdOutlineCheckBoxOutlineBlank className="text-amber-600 bg-amber-600 rounded-sm" />
+                      <span>Personal</span>
+                    </div>
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
+                    4
+                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Work</SidebarMenuButton>
-                  <SidebarMenuBadge>4</SidebarMenuBadge>
+                  <SidebarMenuButton>
+                    <div className="flex gap-2 items-center">
+                      <MdOutlineCheckBoxOutlineBlank className="text-cyan-400 bg-cyan-400 rounded-sm" />
+                      <span>Work</span>
+                    </div>
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
+                    4
+                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Add New List</SidebarMenuButton>
+                  <SidebarMenuButton>
+                    <IoMdAdd size={20} className="text-violet-500" />
+                    Add New List
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               </CollapsibleContent>
             </SidebarGroup>
@@ -90,7 +127,7 @@ export function AppSidebar() {
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild>
-                <CollapsibleTrigger>
+                <CollapsibleTrigger className="text-violet-950">
                   TAGS
                   <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
