@@ -103,7 +103,9 @@ export function TaskSheet() {
                 </p>
                 <p className="flex gap-1 items-center bg-gray-100 py-2 px-4 rounded-md">
                   <IoMdAdd size={14} className="" />
-                  <span className="font-semibold text-sm">Add Tag</span>
+                  <span className="font-semibold md:text-sm text-xs">
+                    Add Tag
+                  </span>
                 </p>
               </div>
             </div>
