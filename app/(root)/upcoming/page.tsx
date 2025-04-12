@@ -78,7 +78,7 @@ export default function Upcoming() {
 
               <div className="flex gap-3">
                 <Select>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="sm:w-[180px] w-[160px]">
                     <SelectValue placeholder="Chosse a List" />
                   </SelectTrigger>
                   <SelectContent>
@@ -88,7 +88,7 @@ export default function Upcoming() {
                 </Select>
 
                 <Select>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="sm:w-[180px] w-[160px]">
                     <SelectValue placeholder="Choose a Tag" />
                   </SelectTrigger>
                   <SelectContent>
@@ -132,7 +132,7 @@ export default function Upcoming() {
                 </Button>
               </div>
 
-              <div className="flex space-x-5 rtl:space-x-reverse items-center">
+              <div className="flex sm:space-x-5 space-x-2 rtl:space-x-reverse items-center">
                 <p className="font-bold text-violet-800">priority:</p>
                 <Label className="cursor-pointer hover:bg-green-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300">
                   <Input

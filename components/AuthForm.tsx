@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { FirebaseError } from "firebase/app";
+import { useRouter } from "next/navigation";
 
 const authSchema = z.object({
   email: z
@@ -27,12 +28,12 @@ const authSchema = z.object({
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: zodResolver(authSchema),
   });
@@ -47,12 +48,11 @@ export default function AuthForm() {
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
+        router.push("/upcoming");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
-        alert("Signup successful!");
+        router.push("/upcoming");
       }
-      reset();
     } catch (error) {
       const err = error as FirebaseError;
       alert(err.message);
