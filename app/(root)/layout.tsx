@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AuthProvider } from "@/context/AuthContext";
 import React from "react";
 
 export default async function RootLayout({
@@ -9,13 +10,15 @@ export default async function RootLayout({
 }>) {
   return (
     <main className="w-full flex flex-col min-h-screen">
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="flex-1 mx-5">
-          <SidebarTrigger />
-          {children}
-        </main>
-      </SidebarProvider>
+      <AuthProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <div className="flex-1 mx-5">
+            <SidebarTrigger />
+            {children}
+          </div>
+        </SidebarProvider>
+      </AuthProvider>
     </main>
   );
 }

@@ -10,8 +10,12 @@ import { TaskSheet } from "@/components/TaskSheet";
 import React from "react";
 
 import NewTaskForm from "@/components/NewTaskForm";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Upcoming() {
+  const { user } = useAuth();
+  console.log(user);
+
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
       <div className="flex gap-6 items-center">
@@ -23,7 +27,7 @@ export default function Upcoming() {
       <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4">
         <p className="text-xl font-bold">Today</p>
 
-        <NewTaskForm />
+        <NewTaskForm userId={user?.uid} />
 
         <div className="flex flex-col ml-[20px] gap-2">
           <div className="flex items-center justify-between ">

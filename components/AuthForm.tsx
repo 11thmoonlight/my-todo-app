@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
 
 const authSchema = z.object({
   email: z
@@ -47,10 +48,17 @@ export default function AuthForm() {
   }) => {
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const token = await userCredential.user.getIdToken();
+        Cookie.set("token", token);
         router.push("/upcoming");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
+        alert("ok");
         router.push("/upcoming");
       }
     } catch (error) {

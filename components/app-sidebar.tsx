@@ -281,7 +281,7 @@ export function AppSidebar() {
                 </div>
                 <SidebarMenuButton className="cursor-pointer">
                   <Dialog>
-                    <DialogTrigger asChild>
+                    <DialogTrigger asChild className="w-full">
                       <div className="flex gap-1 bg-gray-200 p-2 rounded-md text-xs">
                         <IoMdAdd size={16} className="text-violet-500" />
                         <span className="font-semibold">Add New Tag</span>

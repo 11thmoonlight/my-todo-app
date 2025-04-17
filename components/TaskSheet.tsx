@@ -19,24 +19,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import React from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Separator } from "./ui/separator";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { Input } from "./ui/input";
 
 export function TaskSheet() {
-  const [date, setDate] = React.useState<Date>();
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -75,28 +66,7 @@ export function TaskSheet() {
                 </SelectContent>
               </Select>
 
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[180px] justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <Input type="time" />
               <div className="flex gap-4 items-center">
                 <p className="py-2 px-4 bg-amber-500 rounded-md w-fit font-semibold text-sm">
                   Tag 1
