@@ -34,6 +34,7 @@ import { useEffect, useState } from "react";
 import { getLists } from "@/services/listService";
 
 import { useAuth } from "@/context/AuthContext";
+import { getTags } from "@/services/tagService";
 
 type List = {
   id: string;
@@ -42,35 +43,60 @@ type List = {
 };
 
 const colorClasses = {
-  amber: "text-amber-600 bg-amber-600",
-  blue: "text-blue-600 bg-blue-600",
-  cyan: "text-cyan-600 bg-cyan-600",
-  emerald: "text-emerald-600 bg-emerald-600",
-  fuchsia: "text-fuchsia-600 bg-fuchsia-600",
-  gray: "text-gray-600 bg-gray-600",
-  green: "text-green-600 bg-green-600",
-  indigo: "text-indigo-600 bg-indigo-600",
-  lime: "text-lime-600 bg-lime-600",
-  neutral: "text-neutral-600 bg-neutral-600",
-  orange: "text-orange-600 bg-orange-600",
-  pink: "text-pink-600 bg-pink-600",
-  purple: "text-purple-600 bg-purple-600",
-  red: "text-red-600 bg-red-600",
-  rose: "text-rose-600 bg-rose-600",
-  sky: "text-sky-600 bg-sky-600",
-  slate: "text-slate-600 bg-slate-600",
-  stone: "text-stone-600 bg-stone-600",
-  teal: "text-teal-600 bg-teal-600",
-  violet: "text-violet-600 bg-violet-600",
-  yellow: "text-yellow-600 bg-yellow-600",
-  zinc: "text-zinc-600 bg-zinc-600",
+  amber: "text-amber-500 bg-amber-500",
+  blue: "text-blue-500 bg-blue-500",
+  cyan: "text-cyan-500 bg-cyan-500",
+  emerald: "text-emerald-500 bg-emerald-500",
+  fuchsia: "text-fuchsia-500 bg-fuchsia-500",
+  gray: "text-gray-500 bg-gray-500",
+  green: "text-green-500 bg-green-500",
+  indigo: "text-indigo-500 bg-indigo-500",
+  lime: "text-lime-500 bg-lime-500",
+  neutral: "text-neutral-500 bg-neutral-500",
+  orange: "text-orange-500 bg-orange-500",
+  pink: "text-pink-500 bg-pink-500",
+  purple: "text-purple-500 bg-purple-500",
+  red: "text-red-500 bg-red-500",
+  rose: "text-rose-500 bg-rose-500",
+  sky: "text-sky-500 bg-sky-500",
+  slate: "text-slate-500 bg-slate-500",
+  stone: "text-stone-500 bg-stone-500",
+  teal: "text-teal-500 bg-teal-500",
+  violet: "text-violet-500 bg-violet-500",
+  yellow: "text-yellow-500 bg-yellow-500",
+  zinc: "text-zinc-500 bg-zinc-500",
 };
-9;
+
+const TagcolorClasses = {
+  amber: "text-amber-800 bg-amber-300",
+  blue: "text-blue-800 bg-blue-300",
+  cyan: "text-cyan-800 bg-cyan-300",
+  emerald: "text-emerald-800 bg-emerald-300",
+  fuchsia: "text-fuchsia-800 bg-fuchsia-300",
+  gray: "text-gray-800 bg-gray-300",
+  green: "text-green-800 bg-green-300",
+  indigo: "text-indigo-800 bg-indigo-300",
+  lime: "text-lime-800 bg-lime-300",
+  neutral: "text-neutral-800 bg-neutral-300",
+  orange: "text-orange-800 bg-orange-300",
+  pink: "text-pink-800 bg-pink-300",
+  purple: "text-purple-800 bg-purple-300",
+  red: "text-red-800 bg-red-300",
+  rose: "text-rose-800 bg-rose-300",
+  sky: "text-sky-800 bg-sky-300",
+  slate: "text-slate-800 bg-slate-300",
+  stone: "text-stone-800 bg-stone-300",
+  teal: "text-teal-800 bg-teal-300",
+  violet: "text-violet-800 bg-violet-300",
+  yellow: "text-yellow-800 bg-yellow-300",
+  zinc: "text-zinc-800 bg-zinc-300",
+};
 
 export function AppSidebar() {
   const { user } = useAuth();
   const [lists, setLists] = useState<List[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -89,7 +115,24 @@ export function AppSidebar() {
     }
   }, [user?.uid]);
 
-  console.log(lists);
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const data = await getTags(user?.uid);
+        setTags(data);
+      } catch (error) {
+        console.error("خطا در دریافت لیست‌ها:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user?.uid) {
+      fetchTags();
+    }
+  }, [user?.uid]);
+
+  console.log(tags);
 
   return (
     <Sidebar>
@@ -188,12 +231,16 @@ export function AppSidebar() {
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent className="flex flex-wrap gap-2">
-                <div className="py-1 px-3 bg-pink-200 w-fit rounded-sm text-xs font-semibold">
-                  Tag 1
-                </div>
-                <div className="py-1 px-3 bg-blue-200 w-fit rounded-sm text-xs font-semibold">
-                  Tag 2
-                </div>
+                {tags.map((tag) => (
+                  <div
+                    key={tag.id}
+                    className={`py-1 px-3 ${
+                      TagcolorClasses[tag.color]
+                    } w-fit rounded-sm text-xs font-semibold`}
+                  >
+                    {tag.title}
+                  </div>
+                ))}
                 <SidebarMenuButton className="cursor-pointer">
                   <NewTagForm />
                 </SidebarMenuButton>

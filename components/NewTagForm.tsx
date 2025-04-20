@@ -17,26 +17,26 @@ import { createTag } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
 
 const colors = [
-  { value: "yellow", bgClass: "bg-yellow-500" },
-  { value: "red", bgClass: "bg-red-500" },
-  { value: "orange", bgClass: "bg-orange-500" },
-  { value: "amber", bgClass: "bg-amber-500" },
-  { value: "lime", bgClass: "bg-lime-500" },
-  { value: "green", bgClass: "bg-green-500" },
-  { value: "emerald", bgClass: "bg-emerald-500" },
-  { value: "teal", bgClass: "bg-teal-500" },
-  { value: "cyan", bgClass: "bg-cyan-500" },
-  { value: "sky", bgClass: "bg-sky-500" },
-  { value: "indigo", bgClass: "bg-indigo-500" },
-  { value: "violet", bgClass: "bg-violet-500" },
-  { value: "purple", bgClass: "bg-purple-500" },
-  { value: "fuchsia", bgClass: "bg-fuchsia-500" },
-  { value: "pink", bgClass: "bg-pink-500" },
-  { value: "rose", bgClass: "bg-rose-500" },
-  { value: "slate", bgClass: "bg-slate-500" },
-  { value: "zinc", bgClass: "bg-zinc-500" },
-  { value: "stone", bgClass: "bg-stone-500" },
-  { value: "neutral", bgClass: "bg-neutral-500" },
+  { value: "yellow", bgClass: "bg-yellow-300" },
+  { value: "red", bgClass: "bg-red-300" },
+  { value: "orange", bgClass: "bg-orange-300" },
+  { value: "amber", bgClass: "bg-amber-300" },
+  { value: "lime", bgClass: "bg-lime-300" },
+  { value: "green", bgClass: "bg-green-300" },
+  { value: "emerald", bgClass: "bg-emerald-300" },
+  { value: "teal", bgClass: "bg-teal-300" },
+  { value: "cyan", bgClass: "bg-cyan-300" },
+  { value: "sky", bgClass: "bg-sky-300" },
+  { value: "indigo", bgClass: "bg-indigo-300" },
+  { value: "violet", bgClass: "bg-violet-300" },
+  { value: "purple", bgClass: "bg-purple-300" },
+  { value: "fuchsia", bgClass: "bg-fuchsia-300" },
+  { value: "pink", bgClass: "bg-pink-300" },
+  { value: "rose", bgClass: "bg-rose-300" },
+  { value: "slate", bgClass: "bg-slate-300" },
+  { value: "zinc", bgClass: "bg-zinc-300" },
+  { value: "stone", bgClass: "bg-stone-300" },
+  { value: "neutral", bgClass: "bg-neutral-300" },
 ];
 
 export default function NewTagForm() {
@@ -60,7 +60,7 @@ export default function NewTagForm() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild className="w-full">
+      <DialogTrigger asChild className="w-fit">
         <div className="flex gap-1 bg-gray-200 p-2 rounded-md text-xs">
           <IoMdAdd size={16} className="text-violet-500" />
           <span className="font-semibold">Add New Tag</span>
