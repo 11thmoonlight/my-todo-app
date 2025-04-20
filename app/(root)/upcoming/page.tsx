@@ -2,19 +2,59 @@
 
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import { MdOutlineCheckBox } from "react-icons/md";
 import { IoChevronForwardOutline } from "react-icons/io5";
 import { PiCalendarXFill } from "react-icons/pi";
 import { Separator } from "@/components/ui/separator";
 import { TaskSheet } from "@/components/TaskSheet";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import NewTaskForm from "@/components/NewTaskForm";
 import { useAuth } from "@/context/AuthContext";
 
+import { getFilteredTasks } from "@/services/taskFilters";
+import { getTasks } from "@/services/taskService";
+
 export default function Upcoming() {
   const { user } = useAuth();
   console.log(user);
+  // const [tasks, setTasks] = useState();
+  // const [loading, setLoading] = useState<boolean>(true);
+
+  const [tasks, setTasks] = useState({
+    todayTasks: [],
+    tomorrowTasks: [],
+    thisWeekTasks: [],
+  });
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (user?.uid) {
+        const filtered = await getFilteredTasks(user.uid);
+        setTasks(filtered);
+      }
+    };
+
+    fetchTasks();
+  }, [user]);
+
+  // useEffect(() => {
+  //   const fetchLists = async () => {
+  //     try {
+  //       const data = await getTasks(user?.uid);
+  //       setTasks(data);
+  //     } catch (error) {
+  //       console.error("خطا در دریافت لیست‌ها:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   if (user?.uid) {
+  //     fetchLists();
+  //   }
+  // }, [user?.uid]);
+
+  console.log("tasks", tasks);
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
