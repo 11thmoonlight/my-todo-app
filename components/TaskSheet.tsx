@@ -21,13 +21,55 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-import React from "react";
+import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Separator } from "./ui/separator";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { Input } from "./ui/input";
+import { updateTask } from "@/services/taskService";
+import { z } from "zod";
 
-export function TaskSheet() {
+const formSchema = z.object({
+  title: z.string().min(1, "Required"),
+  description: z.string().optional(),
+  list: z.object({
+    title: z.string(),
+    color: z.string(),
+  }),
+  tag: z.object({
+    title: z.string(),
+    color: z.string(),
+  }),
+  date: z.string().min(1, "Pick a date"),
+  time: z.string().min(1, "Pick a time"),
+  priority: z.enum(["low", "medium", "high"]),
+  done: z.boolean().optional(),
+  subtasks: z
+    .array(
+      z.object({
+        title: z.string(),
+        done: z.boolean().optional(),
+      })
+    )
+    .optional(),
+});
+
+export function TaskSheet({ task }, userId) {
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description);
+  const [list, setList] = useState(task.list || "Personal");
+  const [dueTime, setDueTime] = useState(task.dueTime || "");
+  const [tags, setTags] = useState(task.tags || []);
+  const [subtaskInput, setSubtaskInput] = useState("");
+  const [subtasks, setSubtasks] = useState<{ title: string; done: boolean }[]>(
+    []
+  );
+
+  const handleUpdate = async () => {
+    const updatedData = { title, description, list, dueTime, tags };
+    await updateTask(userId, task.id, updatedData);
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -40,13 +82,14 @@ export function TaskSheet() {
           <SheetTitle className="text-2xl font-bold text-violet-900">
             Task:
           </SheetTitle>
-          <SheetDescription className="border-2 border-violet-100 px-4 py-2 rounded-md text-violet-600 font-semibold">
-            Research content ideas
-          </SheetDescription>
+          <Input className="border-2 border-violet-100 px-4 py-2 rounded-md text-violet-600 font-semibold">
+            {task.title}
+          </Input>
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} />
         </SheetHeader>
         <div className="mx-4 flex flex-col gap-6">
           <p className="px-4 py-2 border-2 border-violet-100 rounded-md min-h-[100px] text-sm text-gray-500">
-            Description
+            {task.description}
           </p>
           <div className="flex gap-10">
             <div className="flex flex-col gap-8 text-violet-800 font-semibold">

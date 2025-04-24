@@ -1,159 +1,6 @@
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
-
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
-
-// import React from "react";
-// import { format } from "date-fns";
-// import { cn } from "@/lib/utils";
-// import { Calendar } from "@/components/ui/calendar";
-
-// import { Input } from "./ui/input";
-// import { Textarea } from "./ui/textarea";
-// import { Label } from "./ui/label";
-// import { Button } from "./ui/button";
-
-// import { CalendarIcon } from "lucide-react";
-// import { IoIosFlag } from "react-icons/io";
-// import { IoMdAdd } from "react-icons/io";
-
-// export default function NewTaskForm() {
-//   const [date, setDate] = React.useState<Date>();
-
-//   return (
-//     <Dialog>
-//       <DialogTrigger asChild>
-//         <button className="flex items-center gap-2 border-2 border-violet-200 p-4 rounded-md cursor-pointer hover:bg-violet-200 active:scale-95 transition-transform duration-300">
-//           <IoMdAdd size={20} className="text-violet-500" />
-//           <span className="font-semibold text-violet-500">Add New Task</span>
-//         </button>
-//       </DialogTrigger>
-//       <DialogContent className="sm:max-w-[425px] text-violet-900">
-//         <DialogHeader>
-//           <DialogTitle className="text-center font-bold text-xl mb-3">
-//             Add new task
-//           </DialogTitle>
-//         </DialogHeader>
-//         <div className="flex flex-col gap-6">
-//           <Input id="title" placeholder="Task Title" className="col-span-3" />
-
-//           <Textarea placeholder="Description..." className="w-full" />
-
-//           <div className="flex gap-3">
-//             <Select>
-//               <SelectTrigger className="sm:w-[180px] w-[160px]">
-//                 <SelectValue placeholder="Chosse a List" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="light">Personal</SelectItem>
-//                 <SelectItem value="dark">Work</SelectItem>
-//               </SelectContent>
-//             </Select>
-
-//             <Select>
-//               <SelectTrigger className="sm:w-[180px] w-[160px]">
-//                 <SelectValue placeholder="Choose a Tag" />
-//               </SelectTrigger>
-//               <SelectContent>
-//                 <SelectItem value="light">Personal</SelectItem>
-//                 <SelectItem value="dark">Work</SelectItem>
-//               </SelectContent>
-//             </Select>
-//           </div>
-
-//           <div className="flex gap-3">
-
-//             <Input type="date" />
-//             <Input type="time" />
-//           </div>
-
-//           <div className="flex gap-2">
-//             <Input type="text" placeholder="Add a Subtask" />
-//             <Button className="bg-violet-900 text-violet-100 hover:bg-violet-700 active:scale-80 transition-transform duration-300 rounded-4xl">
-//               Add
-//             </Button>
-//           </div>
-
-//           <div className="flex sm:space-x-5 space-x-2 rtl:space-x-reverse items-center">
-//             <p className="font-bold text-violet-800">priority:</p>
-//             <Label className="cursor-pointer hover:bg-green-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300">
-//               <Input
-//                 type="radio"
-//                 name="priority"
-//                 value="low"
-//                 className="hidden peer"
-//               />
-//               <div className="flex gap-1 items-end justify-center p-3 rounded-lg border border-gray-300 peer-checked:border-green-500 peer-checked:bg-green-50 transition">
-//                 <span className="text-sm mt-1 text-gray-700 mb-[1px]">Low</span>
-//                 <IoIosFlag className="text-green-500" size={18} />
-//               </div>
-//             </Label>
-
-//             <Label className="cursor-pointer hover:bg-yellow-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300">
-//               <Input
-//                 type="radio"
-//                 name="priority"
-//                 value="medium"
-//                 className="hidden peer"
-//               />
-//               <div className="flex gap-1 items-end justify-center p-3 rounded-lg border border-gray-300 peer-checked:border-yellow-500 peer-checked:bg-yellow-50 transition">
-//                 <span className="text-sm mt-1 text-gray-700 mb-[1px]">
-//                   Medium
-//                 </span>
-//                 <IoIosFlag className="text-yellow-400" size={18} />
-//               </div>
-//             </Label>
-
-//             <Label className="cursor-pointer hover:bg-red-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300">
-//               <Input
-//                 type="radio"
-//                 name="priority"
-//                 value="high"
-//                 className="hidden peer"
-//               />
-//               <div className="flex gap-1 items-end justify-center p-3 rounded-lg border border-gray-300 peer-checked:border-red-500 peer-checked:bg-red-50 transition">
-//                 <span className="text-sm mt-1 text-gray-700 mb-[1px]">
-//                   High
-//                 </span>
-//                 <IoIosFlag className="text-red-400" size={18} />
-//               </div>
-//             </Label>
-//           </div>
-//         </div>
-//         <DialogFooter>
-//           <Button
-//             type="submit"
-//             className="w-full mt-6 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-80 transition-transform duration-300"
-//           >
-//             Add Task
-//           </Button>
-//         </DialogFooter>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -184,37 +31,113 @@ import {
 } from "@/components/ui/select";
 import { IoMdAdd, IoIosFlag } from "react-icons/io";
 import { createTask } from "@/services/taskService";
+import { getLists } from "@/services/listService";
+import { getTags } from "@/services/tagService";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
   description: z.string().optional(),
-  list: z.string().min(1, "Select a list"),
-  tag: z.string().min(1, "Select a tag"),
+  list: z.object({
+    title: z.string(),
+    color: z.string(),
+  }),
+  tag: z.object({
+    title: z.string(),
+    color: z.string(),
+  }),
   date: z.string().min(1, "Pick a date"),
   time: z.string().min(1, "Pick a time"),
   priority: z.enum(["low", "medium", "high"]),
+  done: z.boolean().optional(),
+  subtasks: z
+    .array(
+      z.object({
+        title: z.string(),
+        done: z.boolean().optional(),
+      })
+    )
+    .optional(),
 });
 
 export default function NewTaskForm({ userId }: { userId: string }) {
+  const [lists, setLists] = useState<any[]>([]);
+  const [tags, setTags] = useState<any[]>([]);
+  const [subtaskInput, setSubtaskInput] = useState("");
+  const [subtasks, setSubtasks] = useState<{ title: string; done: boolean }[]>(
+    []
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      list: "",
-      tag: "",
-      date: undefined,
+      list: { title: "", color: "" },
+      tag: { title: "", color: "" },
+      date: "",
       time: "",
       priority: "low",
+      done: false,
+      subtasks: [],
     },
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userId) return;
+      const fetchedLists = await getLists(userId);
+      const fetchedTags = await getTags(userId);
+      setLists(fetchedLists);
+      setTags(fetchedTags);
+    };
+    fetchData();
+  }, [userId]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createTask(userId, values);
+      await createTask(userId, {
+        ...values,
+        done: false,
+        subtasks,
+      });
       form.reset();
+      setSubtasks([]);
     } catch (err) {
       console.error("Error creating task:", err);
+    }
+  };
+
+  const handleAddSubtask = () => {
+    if (subtaskInput.trim()) {
+      setSubtasks((prev) => [
+        ...prev,
+        { title: subtaskInput.trim(), done: false },
+      ]);
+      setSubtaskInput("");
+    }
+  };
+
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+
+  const handleDeleteSubtask = (index: number) => {
+    setSubtasks((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleEditSubtask = (index: number) => {
+    setEditingIndex(index);
+    setEditingText(subtasks[index].title);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingText.trim()) {
+      setSubtasks((prev) =>
+        prev.map((task, i) =>
+          i === editingIndex ? { ...task, title: editingText.trim() } : task
+        )
+      );
+      setEditingIndex(null);
+      setEditingText("");
     }
   };
 
@@ -269,15 +192,32 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 name="list"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={(value) =>
+                        field.onChange(JSON.parse(value))
+                      }
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a List" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="personal">Personal</SelectItem>
-                        <SelectItem value="work">Work</SelectItem>
+                        {lists.map((list) => (
+                          <SelectItem
+                            key={list.id}
+                            value={JSON.stringify({
+                              title: list.title,
+                              color: list.color,
+                            })}
+                          >
+                            <span
+                              className="inline-block w-3 h-3 rounded-full mr-2"
+                              style={{ backgroundColor: list.color }}
+                            ></span>
+                            {list.title}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -290,15 +230,32 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 name="tag"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={(value) =>
+                        field.onChange(JSON.parse(value))
+                      }
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Tag" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="urgent">Urgent</SelectItem>
-                        <SelectItem value="optional">Optional</SelectItem>
+                        {tags.map((tag) => (
+                          <SelectItem
+                            key={tag.id}
+                            value={JSON.stringify({
+                              title: tag.title,
+                              color: tag.color,
+                            })}
+                          >
+                            <span
+                              className="inline-block w-3 h-3 rounded-full mr-2"
+                              style={{ backgroundColor: tag.color }}
+                            ></span>
+                            {tag.title}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -308,43 +265,6 @@ export default function NewTaskForm({ userId }: { userId: string }) {
             </div>
 
             <div className="flex gap-3">
-              {/* <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={`w-full text-left ${
-                              !field.value ? "text-muted-foreground" : ""
-                            }`}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="date"
@@ -413,6 +333,82 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 </FormItem>
               )}
             />
+
+            <div>
+              <div className="flex gap-2">
+                <Input
+                  value={subtaskInput}
+                  onChange={(e) => setSubtaskInput(e.target.value)}
+                  placeholder="New subtask..."
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddSubtask}
+                  className="bg-violet-300 text-violet-950 hover:bg-violet-200"
+                >
+                  Add
+                </Button>
+              </div>
+
+              <ul className="mt-3 space-y-2 text-sm text-violet-800">
+                {subtasks.map((task, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    {editingIndex === index ? (
+                      <>
+                        <Input
+                          value={editingText}
+                          onChange={(e) => setEditingText(e.target.value)}
+                          className="w-full"
+                        />
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={handleSaveEdit}
+                          className="text-green-600"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            setEditingIndex(null);
+                            setEditingText("");
+                          }}
+                          className="text-gray-500"
+                        >
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex-1">{task.title}</span>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEditSubtask(index)}
+                          className="text-blue-600"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleDeleteSubtask(index)}
+                          className="text-red-500"
+                        >
+                          X
+                        </Button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <DialogFooter>
               <Button
