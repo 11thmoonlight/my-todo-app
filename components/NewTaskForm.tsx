@@ -33,6 +33,7 @@ import { IoMdAdd, IoIosFlag } from "react-icons/io";
 import { createTask } from "@/services/taskService";
 import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
+import { AiOutlineClose } from "react-icons/ai";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
@@ -198,7 +199,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                       }
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Choose a List" />
                         </SelectTrigger>
                       </FormControl>
@@ -236,7 +237,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                       }
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Choose a Tag" />
                         </SelectTrigger>
                       </FormControl>
@@ -296,41 +297,46 @@ export default function NewTaskForm({ userId }: { userId: string }) {
               control={form.control}
               name="priority"
               render={({ field }) => (
-                <FormItem>
-                  <div className="flex gap-3">
-                    {["low", "medium", "high"].map((level) => (
-                      <label
-                        key={level}
-                        className={`cursor-pointer border p-2 rounded-lg transition-all ${
-                          field.value === level
-                            ? "border-violet-500 bg-violet-100"
-                            : "border-gray-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          value={level}
-                          checked={field.value === level}
-                          onChange={() => field.onChange(level)}
-                          className="hidden"
-                        />
-                        <div className="flex items-center gap-1">
-                          <span className="capitalize">{level}</span>
-                          <IoIosFlag
-                            className={`${
-                              level === "low"
-                                ? "text-green-500"
-                                : level === "medium"
-                                ? "text-yellow-500"
-                                : "text-red-500"
-                            }`}
+                <div className="flex items-center justify-between">
+                  <p className="text-violet-700 font-bold tracking-wide">
+                    Priority:
+                  </p>
+                  <FormItem>
+                    <div className="flex gap-3">
+                      {["low", "medium", "high"].map((level) => (
+                        <label
+                          key={level}
+                          className={`cursor-pointer border p-2 rounded-lg transition-all ${
+                            field.value === level
+                              ? "border-violet-500 bg-violet-100"
+                              : "border-gray-300"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            value={level}
+                            checked={field.value === level}
+                            onChange={() => field.onChange(level)}
+                            className="hidden"
                           />
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
+                          <div className="flex items-center gap-2">
+                            <span className="capitalize">{level}</span>
+                            <IoIosFlag
+                              className={`${
+                                level === "low"
+                                  ? "text-green-500"
+                                  : level === "medium"
+                                  ? "text-yellow-500"
+                                  : "text-red-500"
+                              }`}
+                            />
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                </div>
               )}
             />
 
@@ -350,9 +356,12 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 </Button>
               </div>
 
-              <ul className="mt-3 space-y-2 text-sm text-violet-800">
+              <ul className="mt-3 space-y-2 text-sm text-violet-800 bg-stone-50 p-2 rounded-lg">
                 {subtasks.map((task, index) => (
-                  <li key={index} className="flex items-center gap-2">
+                  <li
+                    key={index}
+                    className="flex items-center gap-2 border-b-2 last:border-0 last:pb-0 border-violet-100 pb-2 font-semibold"
+                  >
                     {editingIndex === index ? (
                       <>
                         <Input
@@ -372,7 +381,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                         <Button
                           type="button"
                           size="sm"
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => {
                             setEditingIndex(null);
                             setEditingText("");
@@ -388,20 +397,18 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                         <Button
                           type="button"
                           size="sm"
-                          variant="outline"
                           onClick={() => handleEditSubtask(index)}
-                          className="text-blue-600"
+                          className="text-teal-900 bg-teal-100 font-semibold shadow-lg hover:bg-teal-200 hover:scale-105 active:scale-95 transition-transform duration-300"
                         >
                           Edit
                         </Button>
                         <Button
                           type="button"
                           size="sm"
-                          variant="ghost"
                           onClick={() => handleDeleteSubtask(index)}
-                          className="text-red-500"
+                          className="text-pink-900 bg-pink-100 shadow-lg hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300"
                         >
-                          X
+                          <AiOutlineClose />
                         </Button>
                       </>
                     )}
@@ -413,7 +420,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
             <DialogFooter>
               <Button
                 type="submit"
-                className="w-full bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-95 transition"
+                className="w-full bg-violet-300 text-violet-950 hover:bg-violet-200 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
                 Add Task
               </Button>

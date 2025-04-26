@@ -40,7 +40,6 @@ const colorClasses = {
 
 export default function Upcoming() {
   const { user } = useAuth();
-  console.log(user);
 
   const [tasks, setTasks] = useState({
     todayTasks: [],
