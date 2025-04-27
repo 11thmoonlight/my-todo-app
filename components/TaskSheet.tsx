@@ -2,9 +2,7 @@
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -60,8 +58,8 @@ const formSchema = z.object({
 });
 
 export function TaskSheet({ task }) {
-  const [allLists, setAllLists] = useState<any[]>([]);
-  const [allTags, setAllTags] = useState<any[]>([]);
+  const [allLists, setAllLists] = useState<List[]>([]);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
   const { user } = useAuth();
   const userId = user?.uid;
   const [subtasks, setSubtasks] = useState(task.subtasks || []);
@@ -86,8 +84,8 @@ export function TaskSheet({ task }) {
       if (!userId) return;
       const fetchedLists = await getLists(userId);
       const fetchedTags = await getTags(userId);
-      setAllLists(fetchedLists);
-      setAllTags(fetchedTags);
+      setAllLists(fetchedLists as List[]);
+      setAllTags(fetchedTags as Tag[]);
     };
     fetchData();
   }, [userId]);

@@ -34,6 +34,7 @@ import { createTask } from "@/services/taskService";
 import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
 import { AiOutlineClose } from "react-icons/ai";
+import { ListColorClasses } from "@/lib/ColorClasses";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
@@ -61,12 +62,10 @@ const formSchema = z.object({
 });
 
 export default function NewTaskForm({ userId }: { userId: string }) {
-  const [lists, setLists] = useState<any[]>([]);
-  const [tags, setTags] = useState<any[]>([]);
+  const [lists, setLists] = useState<List[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [subtaskInput, setSubtaskInput] = useState("");
-  const [subtasks, setSubtasks] = useState<{ title: string; done: boolean }[]>(
-    []
-  );
+  const [subtasks, setSubtasks] = useState<Subtasks[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -213,8 +212,9 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             })}
                           >
                             <span
-                              className="inline-block w-3 h-3 rounded-full mr-2"
-                              style={{ backgroundColor: list.color }}
+                              className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                ListColorClasses[list.color]
+                              }`}
                             ></span>
                             {list.title}
                           </SelectItem>
@@ -251,8 +251,9 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             })}
                           >
                             <span
-                              className="inline-block w-3 h-3 rounded-full mr-2"
-                              style={{ backgroundColor: tag.color }}
+                              className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                ListColorClasses[tag.color]
+                              }`}
                             ></span>
                             {tag.title}
                           </SelectItem>

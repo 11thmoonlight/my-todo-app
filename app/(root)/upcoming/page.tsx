@@ -12,31 +12,7 @@ import NewTaskForm from "@/components/NewTaskForm";
 import { useAuth } from "@/context/AuthContext";
 
 import { getFilteredTasks } from "@/services/taskFilters";
-
-const colorClasses = {
-  amber: "text-amber-500 bg-amber-500",
-  blue: "text-blue-500 bg-blue-500",
-  cyan: "text-cyan-500 bg-cyan-500",
-  emerald: "text-emerald-500 bg-emerald-500",
-  fuchsia: "text-fuchsia-500 bg-fuchsia-500",
-  gray: "text-gray-500 bg-gray-500",
-  green: "text-green-500 bg-green-500",
-  indigo: "text-indigo-500 bg-indigo-500",
-  lime: "text-lime-500 bg-lime-500",
-  neutral: "text-neutral-500 bg-neutral-500",
-  orange: "text-orange-500 bg-orange-500",
-  pink: "text-pink-500 bg-pink-500",
-  purple: "text-purple-500 bg-purple-500",
-  red: "text-red-500 bg-red-500",
-  rose: "text-rose-500 bg-rose-500",
-  sky: "text-sky-500 bg-sky-500",
-  slate: "text-slate-500 bg-slate-500",
-  stone: "text-stone-500 bg-stone-500",
-  teal: "text-teal-500 bg-teal-500",
-  violet: "text-violet-500 bg-violet-500",
-  yellow: "text-yellow-500 bg-yellow-500",
-  zinc: "text-zinc-500 bg-zinc-500",
-};
+import { ListColorClasses, TagcolorClasses } from "@/lib/ColorClasses";
 
 export default function Upcoming() {
   const { user } = useAuth();
@@ -101,7 +77,9 @@ export default function Upcoming() {
               <div className="flex items-center justify-between ">
                 <div className="flex gap-2 items-center">
                   <MdOutlineCheckBoxOutlineBlank
-                    className={`${colorClasses[task.list.color]} rounded-sm`}
+                    className={`${
+                      ListColorClasses[task.list.color]
+                    } rounded-sm`}
                   />
                   <span className="text-xs font-bold">{task.list.title}</span>
                 </div>
@@ -145,7 +123,9 @@ export default function Upcoming() {
                 <div className="flex items-center justify-between ">
                   <div className="flex gap-2 items-center">
                     <MdOutlineCheckBoxOutlineBlank
-                      className={`${colorClasses[task.list.color]} rounded-sm`}
+                      className={`${
+                        ListColorClasses[task.list.color]
+                      } rounded-sm`}
                     />
                     <span className="text-xs font-bold">{task.list.title}</span>
                   </div>
@@ -189,7 +169,9 @@ export default function Upcoming() {
                 <div className="flex items-center justify-between ">
                   <div className="flex gap-2 items-center">
                     <MdOutlineCheckBoxOutlineBlank
-                      className={`${colorClasses[task.list.color]} rounded-sm`}
+                      className={`${
+                        ListColorClasses[task.list.color]
+                      } rounded-sm`}
                     />
                     <span className="text-xs font-bold">{task.list.title}</span>
                   </div>
