@@ -2,7 +2,6 @@
 
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import { IoChevronForwardOutline } from "react-icons/io5";
 import { PiCalendarXFill } from "react-icons/pi";
 import { Separator } from "@/components/ui/separator";
 import { TaskSheet } from "@/components/TaskSheet";
@@ -12,12 +11,16 @@ import NewTaskForm from "@/components/NewTaskForm";
 import { useAuth } from "@/context/AuthContext";
 
 import { getFilteredTasks } from "@/services/taskFilters";
-import { ListColorClasses, TagcolorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses } from "@/lib/ColorClasses";
 
 export default function Upcoming() {
   const { user } = useAuth();
 
-  const [tasks, setTasks] = useState({
+  const [tasks, setTasks] = useState<{
+    todayTasks: Task[];
+    tomorrowTasks: Task[];
+    thisWeekTasks: Task[];
+  }>({
     todayTasks: [],
     tomorrowTasks: [],
     thisWeekTasks: [],
@@ -27,14 +30,18 @@ export default function Upcoming() {
     const fetchTasks = async () => {
       if (user?.uid) {
         const filtered = await getFilteredTasks(user.uid);
-        setTasks(filtered);
+        setTasks(
+          filtered as {
+            todayTasks: Task[];
+            tomorrowTasks: Task[];
+            thisWeekTasks: Task[];
+          }
+        );
       }
     };
 
     fetchTasks();
   }, [user]);
-
-  console.log("tasks", tasks);
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
@@ -59,6 +66,7 @@ export default function Upcoming() {
                 <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
                 <span>{task.title}</span>
               </div>
+
               <TaskSheet task={task} userId={user?.uid} />
             </div>
             <div className="flex gap-4 ml-[24px] h-7">
@@ -78,7 +86,9 @@ export default function Upcoming() {
                 <div className="flex gap-2 items-center">
                   <MdOutlineCheckBoxOutlineBlank
                     className={`${
-                      ListColorClasses[task.list.color]
+                      ListColorClasses[
+                        task.list.color as keyof typeof ListColorClasses
+                      ]
                     } rounded-sm`}
                   />
                   <span className="text-xs font-bold">{task.list.title}</span>
@@ -124,7 +134,9 @@ export default function Upcoming() {
                   <div className="flex gap-2 items-center">
                     <MdOutlineCheckBoxOutlineBlank
                       className={`${
-                        ListColorClasses[task.list.color]
+                        ListColorClasses[
+                          task.list.color as keyof typeof ListColorClasses
+                        ]
                       } rounded-sm`}
                     />
                     <span className="text-xs font-bold">{task.list.title}</span>
@@ -170,7 +182,9 @@ export default function Upcoming() {
                   <div className="flex gap-2 items-center">
                     <MdOutlineCheckBoxOutlineBlank
                       className={`${
-                        ListColorClasses[task.list.color]
+                        ListColorClasses[
+                          task.list.color as keyof typeof ListColorClasses
+                        ]
                       } rounded-sm`}
                     />
                     <span className="text-xs font-bold">{task.list.title}</span>

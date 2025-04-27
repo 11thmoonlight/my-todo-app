@@ -38,25 +38,19 @@ import { getTags } from "@/services/tagService";
 
 import { ListColorClasses, TagcolorClasses } from "@/lib/ColorClasses";
 
-type List = {
-  id: string;
-  name: string;
-  [key: string]: any;
-};
-
 export function AppSidebar() {
   const { user } = useAuth();
   const [lists, setLists] = useState<List[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const fetchLists = async () => {
       try {
         const data = await getLists(user?.uid);
-        setLists(data);
+        setLists(data as List[]);
       } catch (error) {
-        console.error("خطا در دریافت لیست‌ها:", error);
+        console.error("Error fetching Lists:", error);
       } finally {
         setLoading(false);
       }
@@ -71,9 +65,9 @@ export function AppSidebar() {
     const fetchTags = async () => {
       try {
         const data = await getTags(user?.uid);
-        setTags(data);
+        setTags(data as Tag[]);
       } catch (error) {
-        console.error("خطا در دریافت لیست‌ها:", error);
+        console.error("Error fetching Tags:", error);
       } finally {
         setLoading(false);
       }
@@ -153,7 +147,9 @@ export function AppSidebar() {
                       <div className="flex gap-2 items-center">
                         <MdOutlineCheckBoxOutlineBlank
                           className={`${
-                            ListColorClasses[list.color]
+                            ListColorClasses[
+                              list.color as keyof typeof ListColorClasses
+                            ]
                           } rounded-sm`}
                         />
                         <span>{list.title}</span>
@@ -189,7 +185,7 @@ export function AppSidebar() {
                   <div
                     key={tag.id}
                     className={`py-1 px-3 ${
-                      TagcolorClasses[tag.color]
+                      TagcolorClasses[tag.color as keyof typeof TagcolorClasses]
                     } w-fit rounded-sm text-xs font-semibold`}
                   >
                     {tag.title}

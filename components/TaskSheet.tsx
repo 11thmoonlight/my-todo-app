@@ -31,6 +31,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
+import { ListColorClasses } from "@/lib/ColorClasses";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
@@ -57,7 +58,7 @@ const formSchema = z.object({
     .optional(),
 });
 
-export function TaskSheet({ task }) {
+export function TaskSheet({ task }: { task: Task }) {
   const [allLists, setAllLists] = useState<List[]>([]);
   const [allTags, setAllTags] = useState<Tag[]>([]);
   const { user } = useAuth();
@@ -191,9 +192,12 @@ export function TaskSheet({ task }) {
                                 })}
                               >
                                 <span
-                                  className="inline-block w-3 h-3 rounded-full mr-2"
-                                  style={{ backgroundColor: list.color }}
-                                ></span>
+                                  className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                    ListColorClasses[
+                                      list.color as keyof typeof ListColorClasses
+                                    ]
+                                  }`}
+                                />
                                 {list.title}
                               </SelectItem>
                             ))}
@@ -229,8 +233,11 @@ export function TaskSheet({ task }) {
                                 })}
                               >
                                 <span
-                                  className="inline-block w-3 h-3 rounded-full mr-2"
-                                  style={{ backgroundColor: tag.color }}
+                                  className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                                    ListColorClasses[
+                                      tag.color as keyof typeof ListColorClasses
+                                    ]
+                                  }`}
                                 ></span>
                                 {tag.title}
                               </SelectItem>
