@@ -361,65 +361,67 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 </Button>
               </div>
 
-              <ul className="mt-3 space-y-2 text-sm text-violet-800 bg-stone-50 rounded-lg overflow-y-scroll glass-scrollbar h-[130px] shadow-lg">
-                {subtasks.map((task, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center gap-2 border-b-2 last:border-0 border-violet-100 font-semibold p-2 m-2 pb-4 last:pb-2"
-                  >
-                    {editingIndex === index ? (
-                      <>
-                        <Input
-                          value={editingText}
-                          onChange={(e) => setEditingText(e.target.value)}
-                          className="w-full"
-                        />
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={handleSaveEdit}
-                          className="text-green-600"
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setEditingIndex(null);
-                            setEditingText("");
-                          }}
-                          className="text-gray-500"
-                        >
-                          Cancel
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <span className="flex-1">{task.title}</span>
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => handleEditSubtask(index)}
-                          className="text-teal-900 bg-teal-100 font-semibold shadow-lg hover:bg-teal-200 hover:scale-105 active:scale-95 transition-transform duration-300"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => handleDeleteSubtask(index)}
-                          className="text-pink-900 bg-pink-100 shadow-lg hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300"
-                        >
-                          <AiOutlineClose />
-                        </Button>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {subtasks.length > 0 && (
+                <ul className="mt-3 space-y-2 text-sm text-violet-800 bg-stone-50 rounded-lg shadow-lg max-h-[130px] overflow-y-auto dark-scrollbar">
+                  {subtasks.map((task, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center gap-2 border-b-2 last:border-0 border-violet-100 font-semibold p-2 m-2 pb-4 last:pb-2"
+                    >
+                      {editingIndex === index ? (
+                        <>
+                          <Input
+                            value={editingText}
+                            onChange={(e) => setEditingText(e.target.value)}
+                            className="w-full"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={handleSaveEdit}
+                            className="text-green-600"
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingIndex(null);
+                              setEditingText("");
+                            }}
+                            className="text-gray-500"
+                          >
+                            Cancel
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex-1">{task.title}</span>
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleEditSubtask(index)}
+                            className="text-teal-900 bg-teal-100 font-semibold shadow-lg hover:bg-teal-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleDeleteSubtask(index)}
+                            className="text-pink-900 bg-pink-100 shadow-lg hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                          >
+                            <AiOutlineClose />
+                          </Button>
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <DialogFooter>

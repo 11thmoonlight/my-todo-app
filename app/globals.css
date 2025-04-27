@@ -133,6 +133,27 @@
   background: rgba(255, 255, 255, 0.9);
 }
 
+.dark-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: rgba(80, 80, 80, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 10px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(80, 80, 80, 0.5);
+  border-radius: 10px;
+  border: 2px solid rgba(80, 80, 80, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(80, 80, 80, 0.9);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
