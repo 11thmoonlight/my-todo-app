@@ -54,7 +54,7 @@ export default function Upcoming() {
       <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 h-[350px] overflow-y-scroll glass-scrollbar">
         <p className="text-xl font-bold">Today</p>
 
-        <NewTaskForm userId={user?.uid} />
+        {user && <NewTaskForm userId={user?.uid} />}
 
         {tasks.todayTasks.map((task) => (
           <div
@@ -67,7 +67,7 @@ export default function Upcoming() {
                 <span>{task.title}</span>
               </div>
 
-              <TaskSheet task={task} userId={user?.uid} />
+              {user && <TaskSheet task={task} />}
             </div>
             <div className="flex gap-4 ml-[24px] h-7">
               <div className="flex gap-2 items-center">

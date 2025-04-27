@@ -361,11 +361,11 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                 </Button>
               </div>
 
-              <ul className="mt-3 space-y-2 text-sm text-violet-800 bg-stone-50 p-2 rounded-lg">
+              <ul className="mt-3 space-y-2 text-sm text-violet-800 bg-stone-50 rounded-lg overflow-y-scroll glass-scrollbar h-[130px] shadow-lg">
                 {subtasks.map((task, index) => (
                   <li
                     key={index}
-                    className="flex items-center gap-2 border-b-2 last:border-0 last:pb-0 border-violet-100 pb-2 font-semibold"
+                    className="flex items-center gap-2 border-b-2 last:border-0 border-violet-100 font-semibold p-2 m-2 pb-4 last:pb-2"
                   >
                     {editingIndex === index ? (
                       <>
