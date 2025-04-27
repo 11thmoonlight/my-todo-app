@@ -87,8 +87,8 @@ export default function NewTaskForm({ userId }: { userId: string }) {
       if (!userId) return;
       const fetchedLists = await getLists(userId);
       const fetchedTags = await getTags(userId);
-      setLists(fetchedLists);
-      setTags(fetchedTags);
+      setLists(fetchedLists as List[]);
+      setTags(fetchedTags as Tag[]);
     };
     fetchData();
   }, [userId]);
@@ -213,9 +213,11 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                           >
                             <span
                               className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                                ListColorClasses[list.color]
+                                ListColorClasses[
+                                  list.color as keyof typeof ListColorClasses
+                                ]
                               }`}
-                            ></span>
+                            />
                             {list.title}
                           </SelectItem>
                         ))}

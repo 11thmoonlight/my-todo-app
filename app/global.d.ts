@@ -19,7 +19,6 @@ declare global {
   interface Subtasks {
     title: string;
     done: boolean;
-    id: string;
   }
 
   interface Task {
