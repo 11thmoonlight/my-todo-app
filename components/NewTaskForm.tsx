@@ -254,7 +254,9 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                           >
                             <span
                               className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                                ListColorClasses[tag.color]
+                                ListColorClasses[
+                                  tag.color as keyof typeof ListColorClasses
+                                ]
                               }`}
                             ></span>
                             {tag.title}
