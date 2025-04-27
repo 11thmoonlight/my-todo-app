@@ -314,7 +314,7 @@ export function TaskSheet({ task }) {
                 </div>
               </div>
 
-              <div className="flex gap-2 justify-between">
+              <div className="flex gap-2 justify-between mt-6">
                 <Button
                   type="button"
                   onClick={() => onDelete()}

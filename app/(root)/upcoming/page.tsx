@@ -68,13 +68,16 @@ export default function Upcoming() {
           12
         </p>
       </div>
-      <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4">
+      <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 h-[350px] overflow-y-scroll glass-scrollbar">
         <p className="text-xl font-bold">Today</p>
 
         <NewTaskForm userId={user?.uid} />
 
         {tasks.todayTasks.map((task) => (
-          <div key={task.id} className="flex flex-col ml-[20px] gap-2">
+          <div
+            key={task.id}
+            className="flex flex-col ml-[20px] gap-2 border-b-2 border-violet-200 pb-6 last:pb-0 last:border-0"
+          >
             <div className="flex items-center justify-between ">
               <div className="flex gap-2 items-center">
                 <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
@@ -108,14 +111,17 @@ export default function Upcoming() {
         ))}
       </div>
       <div className="flex gap-6 lg:flex-row flex-col">
-        <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 w-full">
+        <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 w-full h-[350px] overflow-y-scroll glass-scrollbar">
           <p className="text-xl font-bold">Tomorrow</p>
           <button className="flex items-center gap-2 border-2 border-violet-200 p-4 rounded-md cursor-pointer">
             <IoMdAdd size={20} className="text-violet-500" />
             <span className="font-semibold text-violet-500">Add New Task</span>
           </button>
           {tasks.tomorrowTasks.map((task) => (
-            <div key={task.id} className="flex flex-col ml-[20px] gap-2">
+            <div
+              key={task.id}
+              className="flex flex-col ml-[20px] gap-2 border-b-2 border-violet-200 pb-6 last:pb-0 last:border-0"
+            >
               <div className="flex items-center justify-between ">
                 <div className="flex gap-2 items-center">
                   <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
@@ -148,7 +154,7 @@ export default function Upcoming() {
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 w-full">
+        <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4 w-full h-[350px] overflow-y-scroll glass-scrollbar">
           <p className="text-xl font-bold">This Week</p>
           <button className="flex items-center gap-2 border-2 border-violet-200 p-4 rounded-md cursor-pointer">
             <IoMdAdd size={20} className="text-violet-500" />
@@ -156,7 +162,10 @@ export default function Upcoming() {
           </button>
 
           {tasks.thisWeekTasks.map((task) => (
-            <div key={task.id} className="flex flex-col ml-[20px] gap-2">
+            <div
+              key={task.id}
+              className="flex flex-col ml-[20px] gap-2 border-b-2 border-violet-200 pb-6 last:pb-0 last:border-0"
+            >
               <div className="flex items-center justify-between ">
                 <div className="flex gap-2 items-center">
                   <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
