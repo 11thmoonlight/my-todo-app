@@ -138,20 +138,20 @@
 }
 
 .dark-scrollbar::-webkit-scrollbar-track {
-  background: rgba(80, 80, 80, 0.2);
+  background: rgba(243, 165, 250, 0.3);
   backdrop-filter: blur(4px);
   border-radius: 10px;
 }
 
 .dark-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(80, 80, 80, 0.5);
+  background: rgba(243, 165, 250, 0.5);
   border-radius: 10px;
-  border: 2px solid rgba(80, 80, 80, 0.1);
+  border: 2px solid rgba(40, 40, 40, 0.1);
   backdrop-filter: blur(4px);
 }
 
 .dark-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(80, 80, 80, 0.9);
+  background: rgba(243, 165, 250, 0.1);
 }
 
 @layer base {

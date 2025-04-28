@@ -8,7 +8,12 @@ import {
   isWithinInterval,
 } from "date-fns";
 
-export const getFilteredTasks = async (userId) => {
+export const getFilteredTasks = async (
+  userId,
+  selectedListTitle,
+  selectedTagTitle,
+  searchQuery
+) => {
   const tasks = await getTasks(userId);
 
   const todayStart = startOfToday();
@@ -35,9 +40,41 @@ export const getFilteredTasks = async (userId) => {
     return due && isWithinInterval(due, { start: weekStart, end: weekEnd });
   });
 
+  const listTasks = selectedListTitle
+    ? tasks.filter(
+        (task) =>
+          task.list?.title?.toLowerCase() === selectedListTitle.toLowerCase()
+      )
+    : [];
+
+  const tagTasks = selectedTagTitle
+    ? tasks.filter(
+        (task) =>
+          task.tag?.title?.toLowerCase() === selectedTagTitle.toLowerCase()
+      )
+    : [];
+
+  const searchTasks = searchQuery
+    ? tasks.filter((task) => {
+        const query = searchQuery.toLowerCase();
+        return (
+          task.title.toLowerCase().includes(query) ||
+          task.description.toLowerCase().includes(query) ||
+          task.list?.title?.toLowerCase().includes(query) ||
+          task.tag?.title?.toLowerCase().includes(query) ||
+          task.subtasks?.some((subtask) =>
+            subtask.title.toLowerCase().includes(query)
+          )
+        );
+      })
+    : [];
+
   return {
     todayTasks,
     tomorrowTasks,
     thisWeekTasks,
+    listTasks,
+    tagTasks,
+    searchTasks,
   };
 };
