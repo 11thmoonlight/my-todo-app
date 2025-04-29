@@ -1,20 +1,98 @@
-// import { getFilteredTasks } from "@/services/taskService";
-// import { Task } from "@/types";
-// import TasksList from "@/components/TasksList";
+"use client";
 
-// interface ListPageProps {
-//   params: { listTitle: string };
-// }
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { getFilteredTasks } from "@/services/taskFilters";
+import { TaskSheet } from "@/components/TaskSheet";
+import { Separator } from "@/components/ui/separator";
+import { ListColorClasses } from "@/lib/ColorClasses";
 
-// export default async function ListPage({ params }: ListPageProps) {
-//   const userId = "yourUserId";
-//   const tasksData = await getFilteredTasks(userId);
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { PiCalendarXFill } from "react-icons/pi";
+import NewTaskForm from "@/components/NewTaskForm";
 
-//   const filteredTasks = tasksData.allTasks.filter(
-//     (task) =>
-//       task.list.title.toLowerCase() ===
-//       decodeURIComponent(params.listTitle).toLowerCase()
-//   );
+interface ListPageProps {
+  params: { listTitle: string };
+}
 
-//   return <TasksList tasks={filteredTasks} />;
-// }
+export default function ListPage({ params }: ListPageProps) {
+  const { user } = useAuth();
+  const [listTasks, setListTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      if (!user) return;
+      try {
+        const { listTasks: filteredTasks } = await getFilteredTasks(
+          user.uid,
+          params.listTitle,
+          "",
+          ""
+        );
+        setListTasks(filteredTasks);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    }
+    fetchTasks();
+  }, [user, params.listTitle]);
+
+  return (
+    <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
+      <div className="flex gap-6 items-center">
+        <p className="text-4xl font-bold">{params.listTitle}</p>
+        <p className="text-2xl font-semibold px-2 py-1 border-2 border-violet-50 rounded-md">
+          12
+        </p>
+      </div>
+      <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4">
+        {user && <NewTaskForm userId={user?.uid} />}
+        {listTasks.length > 0 ? (
+          listTasks.map((task) => (
+            <div
+              key={task.id}
+              className="flex flex-col ml-[20px] gap-2 border-b-2 border-violet-200 pb-6 last:pb-0 last:border-0"
+            >
+              <div className="flex items-center justify-between ">
+                <div className="flex gap-2 items-center">
+                  <MdOutlineCheckBoxOutlineBlank className="text-violet-400" />
+                  <span>{task.title}</span>
+                </div>
+
+                {user && <TaskSheet task={task} />}
+              </div>
+              <div className="flex gap-4 ml-[24px] h-7">
+                <div className="flex gap-2 items-center">
+                  <PiCalendarXFill />
+                  <p className="text-xs font-bold">{task.date}</p>
+                </div>
+                <Separator orientation="vertical" />
+                <div className="flex gap-2 items-center">
+                  <span className="bg-violet-200 px-2 py-1 flex items-center rounded-md text-xs font-bold">
+                    {task.subtasks.length}
+                  </span>
+                  <p className="text-xs font-bold">Subtasks</p>
+                </div>
+                <Separator orientation="vertical" />
+                <div className="flex items-center justify-between ">
+                  <div className="flex gap-2 items-center">
+                    <MdOutlineCheckBoxOutlineBlank
+                      className={`${
+                        ListColorClasses[
+                          task.list.color as keyof typeof ListColorClasses
+                        ]
+                      } rounded-sm`}
+                    />
+                    <span className="text-xs font-bold">{task.list.title}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No tasks found for this list.</p>
+        )}
+      </div>
+    </div>
+  );
+}
