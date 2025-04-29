@@ -143,21 +143,24 @@ export function AppSidebar() {
               <CollapsibleContent>
                 {lists.map((list) => (
                   <SidebarMenuItem key={list.id}>
-                    <SidebarMenuButton>
-                      <div className="flex gap-2 items-center">
-                        <MdOutlineCheckBoxOutlineBlank
-                          className={`${
-                            ListColorClasses[
-                              list.color as keyof typeof ListColorClasses
-                            ]
-                          } rounded-sm`}
-                        />
-                        <span>{list.title}</span>
-                      </div>
-                    </SidebarMenuButton>
-                    <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
-                      4
-                    </SidebarMenuBadge>
+                    <Link href={`/list/${encodeURIComponent(list.title)}`}>
+                      <SidebarMenuButton>
+                        <div className="flex gap-2 items-center">
+                          <MdOutlineCheckBoxOutlineBlank
+                            className={`${
+                              ListColorClasses[
+                                list.color as keyof typeof ListColorClasses
+                              ]
+                            } rounded-sm`}
+                          />
+                          <span>{list.title}</span>
+                        </div>
+                      </SidebarMenuButton>
+
+                      <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
+                        4
+                      </SidebarMenuBadge>
+                    </Link>
                   </SidebarMenuItem>
                 ))}
 
@@ -182,14 +185,20 @@ export function AppSidebar() {
               </SidebarGroupLabel>
               <CollapsibleContent className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
-                  <div
+                  <Link
+                    href={`/tag/${encodeURIComponent(tag.title)}`}
                     key={tag.id}
-                    className={`py-1 px-3 ${
-                      TagcolorClasses[tag.color as keyof typeof TagcolorClasses]
-                    } w-fit rounded-sm text-xs font-semibold`}
                   >
-                    {tag.title}
-                  </div>
+                    <div
+                      className={`py-1 px-3 ${
+                        TagcolorClasses[
+                          tag.color as keyof typeof TagcolorClasses
+                        ]
+                      } w-fit rounded-sm text-xs font-semibold`}
+                    >
+                      {tag.title}
+                    </div>
+                  </Link>
                 ))}
                 <SidebarMenuButton className="cursor-pointer">
                   <NewTagForm />
