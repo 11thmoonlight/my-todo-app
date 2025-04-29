@@ -43,6 +43,8 @@ export default function Upcoming() {
     fetchTasks();
   }, [user]);
 
+  console.log(tasks);
+
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
       <div className="flex gap-6 items-center">
