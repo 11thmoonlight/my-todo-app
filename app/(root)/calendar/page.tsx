@@ -1,104 +1,155 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
+import interactionPlugin, {
+  DateClickArg,
+  EventClickArg,
+} from "@fullcalendar/interaction";
 import {
-  collection,
-  getDocs,
   addDoc,
+  collection,
   deleteDoc,
   doc,
+  getDocs,
   updateDoc,
 } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/context/AuthContext";
 
-interface EventData {
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+} from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+
+type EventData = {
   id: string;
   title: string;
-  date: string;
+  start: string;
+  end: string;
   color: string;
-}
+};
 
-export default function Calendar() {
+const colors = [
+  { value: "yellow", bgClass: "bg-yellow-500" },
+  { value: "red", bgClass: "bg-red-500" },
+  { value: "orange", bgClass: "bg-orange-500" },
+  { value: "amber", bgClass: "bg-amber-500" },
+  { value: "lime", bgClass: "bg-lime-500" },
+  { value: "green", bgClass: "bg-green-500" },
+  { value: "emerald", bgClass: "bg-emerald-500" },
+  { value: "teal", bgClass: "bg-teal-500" },
+  { value: "cyan", bgClass: "bg-cyan-500" },
+  { value: "sky", bgClass: "bg-sky-500" },
+  { value: "indigo", bgClass: "bg-indigo-500" },
+  { value: "violet", bgClass: "bg-violet-500" },
+  { value: "purple", bgClass: "bg-purple-500" },
+  { value: "fuchsia", bgClass: "bg-fuchsia-500" },
+  { value: "pink", bgClass: "bg-pink-500" },
+  { value: "rose", bgClass: "bg-rose-500" },
+  { value: "slate", bgClass: "bg-slate-500" },
+  { value: "zinc", bgClass: "bg-zinc-500" },
+  { value: "stone", bgClass: "bg-stone-500" },
+  { value: "neutral", bgClass: "bg-neutral-500" },
+];
+
+const Calendar = () => {
+  const { user } = useAuth();
   const [events, setEvents] = useState<EventData[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [title, setTitle] = useState("");
-  const [color, setColor] = useState("#4ade80");
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const calendarRef = useRef<FullCalendar | null>(null);
+
+  const userId = user?.uid;
+
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      start: "",
+      end: "",
+      color: "#3788d8",
+    },
+  });
+
+  const fetchEvents = async () => {
+    if (!userId) return;
+    const eventsRef = collection(db, "users", userId, "events");
+    const querySnapshot = await getDocs(eventsRef);
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as EventData[];
+    setEvents(data);
+  };
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const querySnapshot = await getDocs(collection(db, "events"));
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as EventData[];
-      setEvents(data);
-    };
-
     fetchEvents();
-  }, []);
+  }, [userId]);
 
-  const handleDateClick = (arg: any) => {
-    setSelectedDate(arg.dateStr);
-    setTitle("");
-    setColor("#4ade80");
+  const handleDateClick = (arg: DateClickArg) => {
+    form.reset({
+      title: "",
+      start: arg.dateStr,
+      end: arg.dateStr,
+      color: "#3788d8",
+    });
     setEditingEventId(null);
-    setModalOpen(true);
+    setOpen(true);
   };
 
-  const handleAddEvent = async () => {
-    if (!title) return;
-
-    if (editingEventId) {
-      const eventRef = doc(db, "events", editingEventId);
-      await updateDoc(eventRef, { title, color });
-      setEvents((prev) =>
-        prev.map((e) => (e.id === editingEventId ? { ...e, title, color } : e))
-      );
-    } else {
-      const newEvent = { title, date: selectedDate, color };
-      const docRef = await addDoc(collection(db, "events"), newEvent);
-      setEvents((prev) => [...prev, { id: docRef.id, ...newEvent }]);
-    }
-
-    setTitle("");
-    setColor("#4ade80");
-    setModalOpen(false);
-    setEditingEventId(null);
-  };
-
-  const handleEventClick = (clickInfo: any) => {
-    const event = clickInfo.event;
-    const eventData = events.find((e) => e.id === event.id);
-    if (!eventData) return;
-
-    const confirmEdit = confirm(
-      `می‌خواهی رویداد \"${event.title}\" را ویرایش کنی؟ (برای حذف، روی Cancel بزن)`
-    );
-    if (confirmEdit) {
-      setSelectedDate(event.startStr);
-      setTitle(event.title);
-      setColor(eventData.color);
+  const handleEventClick = (arg: EventClickArg) => {
+    const event = events.find((e) => e.id === arg.event.id);
+    if (event) {
+      form.reset({
+        title: event.title,
+        start: event.start,
+        end: event.end,
+        color: event.color,
+      });
       setEditingEventId(event.id);
-      setModalOpen(true);
-    } else {
-      const confirmDelete = confirm(
-        `آیا مطمئن هستی که می‌خواهی \"${event.title}\" را حذف کنی؟`
-      );
-      if (confirmDelete) {
-        deleteDoc(doc(db, "events", event.id));
-        setEvents((prev) => prev.filter((e) => e.id !== event.id));
-      }
+      setOpen(true);
     }
+  };
+
+  const handleAddOrUpdateEvent = async (values: any) => {
+    if (!userId) return;
+    if (editingEventId) {
+      const eventRef = doc(db, "users", userId, "events", editingEventId);
+      await updateDoc(eventRef, values);
+    } else {
+      await addDoc(collection(db, "users", userId, "events"), values);
+    }
+    setOpen(false);
+    setEditingEventId(null);
+    fetchEvents();
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!userId || !editingEventId) return;
+    await deleteDoc(doc(db, "users", userId, "events", editingEventId));
+    setOpen(false);
+    setEditingEventId(null);
+    fetchEvents();
   };
 
   return (
-    <div className="p-4 bg-white rounded-2xl shadow-lg">
+    <div className="p-4 bg-violet-50 rounded-2xl shadow-lg max-w-full">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -107,71 +158,165 @@ export default function Calendar() {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
-        events={events.map((evt) => ({
-          ...evt,
-          backgroundColor: evt.color,
-        }))}
+        events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
-        eventContent={(eventInfo) => (
-          <div
-            className="px-2 py-1 rounded-md text-xs truncate"
-            style={{
-              backgroundColor: eventInfo.event.extendedProps.color || "#4ade80",
-              color: "#fff",
-            }}
-          >
-            {eventInfo.event.title}
-          </div>
-        )}
-        dayCellClassNames={(arg) => {
-          if ([5, 6].includes(arg.date.getDay())) return ["bg-gray-50"];
-          return [];
-        }}
+        ref={calendarRef}
+        editable
+        selectable
         height="auto"
+        contentHeight="auto"
+        expandRows={true}
+        dayMaxEventRows={true}
       />
 
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">
-              {editingEventId ? "ویرایش رویداد" : "اضافه کردن رویداد"}
-            </h2>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="عنوان رویداد"
-              className="w-full p-2 mb-4 border rounded"
-            />
-            <div className="flex items-center gap-4">
-              <label className="text-sm">رنگ:</label>
-              <input
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px] text-violet-900">
+          <DialogHeader>
+            <DialogTitle className="text-center font-bold text-xl mb-3">
+              {editingEventId ? "Edit Event" : "Add Event"}
+            </DialogTitle>
+          </DialogHeader>
+
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleAddOrUpdateEvent)}
+              className="flex flex-col gap-5"
+            >
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Title" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                onClick={() => {
-                  setModalOpen(false);
-                  setEditingEventId(null);
-                }}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-              >
-                لغو
-              </button>
-              <button
-                onClick={handleAddEvent}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                ذخیره
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <FormField
+                control={form.control}
+                name="start"
+                render={({ field }) => (
+                  <FormItem className="flex justify-between gap-6 mt-4">
+                    <FormLabel className="text-nowrap">Start Time:</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="time"
+                        type="datetime-local"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="end"
+                render={({ field }) => (
+                  <FormItem className="flex justify-between gap-10 mb-4">
+                    <FormLabel className="text-nowrap">End Tile</FormLabel>
+                    <FormControl>
+                      <Input type="datetime-local" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {/* <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Color</FormLabel>
+                    <FormControl>
+                      <Input type="color" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              /> */}
+              {/* <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Color</FormLabel>
+                    <div className="grid grid-cols-5 gap-2">
+                      {colors.map((c) => (
+                        <button
+                          type="button"
+                          key={c.value}
+                          className={`w-8 h-8 rounded-full ${
+                            c.bgClass
+                          } border-2 ${
+                            field.value === c.bgClass
+                              ? "border-black"
+                              : "border-transparent"
+                          }`}
+                          onClick={() => field.onChange(c.bgClass)}
+                        />
+                      ))}
+                    </div>
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-wrap gap-3 rtl:space-x-reverse items-center justify-center ">
+                      {colors.map((color) => (
+                        <Label
+                          key={color.value}
+                          className="cursor-pointer hover:bg-yellow-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300 mb-2"
+                        >
+                          <Input
+                            type="radio"
+                            value={color.value}
+                            checked={field.value === color.value}
+                            onChange={() => field.onChange(color.value)}
+                            className="hidden peer"
+                          />
+                          <div
+                            className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
+                          />
+                        </Label>
+                      ))}
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter className="pt-2 flex justify-between gap-2">
+                <Button
+                  type="submit"
+                  className={`mt-2 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-90 transition-transform duration-300 ${
+                    editingEventId ? "w-1/2" : "w-full"
+                  }`}
+                >
+                  {editingEventId ? "Update Event" : "Add Event"}
+                </Button>
+
+                {editingEventId && (
+                  <Button
+                    type="button"
+                    className="w-1/2 mt-2 bg-pink-300 text-pink-950 hover:bg-pink-200 active:scale-90 transition-transform duration-300"
+                    onClick={handleDeleteEvent}
+                  >
+                    Delete Event
+                  </Button>
+                )}
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-}
+};
+
+export default Calendar;
