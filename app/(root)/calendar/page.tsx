@@ -38,6 +38,9 @@ import {
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 
+import { useMediaQuery } from "react-responsive";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
 type EventData = {
   id: string;
   title: string;
@@ -148,16 +151,92 @@ const Calendar = () => {
     fetchEvents();
   };
 
+  const [title, setTitle] = useState("");
+
+  const isMobile = useMediaQuery({ maxWidth: 640 });
+
+  const handleViewChange = (view: string) => {
+    const calendarApi = calendarRef.current?.getApi();
+    calendarApi?.changeView(view);
+    if (calendarApi) {
+      setTitle(calendarApi.view.title);
+    }
+  };
+
   return (
     <div className="p-4 bg-violet-50 rounded-2xl shadow-lg max-w-full">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              const api = calendarRef.current?.getApi();
+              api?.prev();
+              setTitle(api?.view.title);
+            }}
+            className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+          >
+            <FiChevronLeft />
+          </button>
+          <button
+            onClick={() => {
+              const api = calendarRef.current?.getApi();
+              api?.next();
+              setTitle(api?.view.title);
+            }}
+            className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+          >
+            <FiChevronRight />
+          </button>
+        </div>
+
+        <h2 className="text-lg font-semibold text-center w-full sm:w-auto">
+          {title}
+        </h2>
+
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => {
+              const api = calendarRef.current?.getApi();
+              api?.today();
+              setTitle(api?.view.title);
+            }}
+            className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+          >
+            Today
+          </button>
+          {!isMobile && (
+            <>
+              <button
+                onClick={() => handleViewChange("dayGridMonth")}
+                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
+              >
+                Month
+              </button>
+              <button
+                onClick={() => handleViewChange("timeGridWeek")}
+                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
+              >
+                Week
+              </button>
+              <button
+                onClick={() => handleViewChange("timeGridDay")}
+                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
+              >
+                Day
+              </button>
+            </>
+          )}
+        </div>
+      </div>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        }}
+        headerToolbar={false}
+        // headerToolbar={{
+        //   left: "prev,next today",
+        //   center: "title",
+        //   right: "dayGridMonth,timeGridWeek,timeGridDay",
+        // }}
         events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
@@ -224,45 +303,6 @@ const Calendar = () => {
                   </FormItem>
                 )}
               />
-
-              {/* <FormField
-                control={form.control}
-                name="color"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Color</FormLabel>
-                    <FormControl>
-                      <Input type="color" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              /> */}
-              {/* <FormField
-                control={form.control}
-                name="color"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Color</FormLabel>
-                    <div className="grid grid-cols-5 gap-2">
-                      {colors.map((c) => (
-                        <button
-                          type="button"
-                          key={c.value}
-                          className={`w-8 h-8 rounded-full ${
-                            c.bgClass
-                          } border-2 ${
-                            field.value === c.bgClass
-                              ? "border-black"
-                              : "border-transparent"
-                          }`}
-                          onClick={() => field.onChange(c.bgClass)}
-                        />
-                      ))}
-                    </div>
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="color"
