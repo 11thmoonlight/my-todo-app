@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-export const createTask = async (userId, stickyData) => {
+export const createStikies = async (userId, stickyData) => {
   const ref = collection(db, "users", userId, "stickies");
   await addDoc(ref, stickyData);
 };
@@ -19,9 +19,9 @@ export const getStickies = async (userId) => {
 };
 
 export const updateSticky = async (userId, stickyId, newData) => {
-  await updateDoc(doc(db, "users", userId, "tasks", stickyId), newData);
+  await updateDoc(doc(db, "users", userId, "stickies", stickyId), newData);
 };
 
 export const deleteSticky = async (userId, stickyId) => {
-  await deleteDoc(doc(db, "users", userId, "tasks", stickyId));
+  await deleteDoc(doc(db, "users", userId, "stickies", stickyId));
 };

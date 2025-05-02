@@ -22,10 +22,11 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { IoMdAdd } from "react-icons/io";
-import { createStikies } from "@/services/stickyServices";
+import { deleteSticky, updateSticky } from "@/services/stickyServices";
 import { AiOutlineClose } from "react-icons/ai";
 import { Label } from "./ui/label";
+import { PiNotePencilThin } from "react-icons/pi";
+import { useAuth } from "@/context/AuthContext";
 
 const colors = [
   { value: "yellow", bgClass: "bg-yellow-200" },
@@ -63,30 +64,41 @@ const formSchema = z.object({
     .optional(),
 });
 
-export default function NewStickyForm({ userId }: { userId: string }) {
+export default function StickyUpdateForm({ noteData }) {
   const [subInput, setSubInput] = useState("");
-  const [subs, setSubs] = useState<[]>([]);
+  const [subs, setSubs] = useState(noteData?.subs || []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      subs: [],
-      color: "",
+      title: noteData?.title || "",
+      description: noteData?.description || "",
+      color: noteData?.color || "",
+      subs: noteData?.subs || [],
     },
   });
+  const { user } = useAuth();
+  const userId = user?.uid;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  console.log(noteData);
+  console.log(userId);
+
+  const onEdit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createStikies(userId, {
+      await updateSticky(userId, noteData.id, {
         ...values,
         subs,
       });
-      form.reset();
-      setSubs([]);
     } catch (err) {
-      console.error("Error creating sticky:", err);
+      console.error("Error updating sticky:", err);
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      await deleteSticky(userId, noteData.id);
+    } catch (err) {
+      console.error("Error updating task:", err);
     }
   };
 
@@ -124,20 +136,22 @@ export default function NewStickyForm({ userId }: { userId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="flex items-center justify-center gap-2 border-2 border-violet-200 p-4 rounded-xl cursor-pointer hover:bg-violet-100 active:scale-95 transition-transform duration-300 w-[250px] h-[250px]">
-          <IoMdAdd size={60} className="text-violet-500" />
+        <button>
+          <div className=" text-stone-800">
+            <PiNotePencilThin size={20} className="cursor-pointer" />
+          </div>
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] text-violet-900">
         <DialogHeader>
           <DialogTitle className="text-center font-bold text-xl mb-3">
-            Add new Sticky Note
+            Edit Your Sticky Note
           </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onEdit)}
             className="flex flex-col gap-5"
           >
             <FormField
@@ -272,12 +286,19 @@ export default function NewStickyForm({ userId }: { userId: string }) {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex items-center gap-2">
               <Button
                 type="submit"
-                className="w-full bg-violet-300 text-violet-950 hover:bg-violet-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                className="w-1/2 bg-violet-300 text-violet-950 hover:bg-violet-200 hover:scale-105 active:scale-95 transition-transform duration-300"
               >
-                Add Task
+                Edit
+              </Button>
+              <Button
+                type="button"
+                className="w-1/2 bg-pink-300 text-pink-950 hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                onClick={onDelete}
+              >
+                Delete
               </Button>
             </DialogFooter>
           </form>

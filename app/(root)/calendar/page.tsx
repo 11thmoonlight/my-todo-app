@@ -189,7 +189,7 @@ const Calendar = () => {
           </button>
         </div>
 
-        <h2 className="text-lg font-semibold text-center w-full sm:w-auto">
+        <h2 className="sm:text-2xl text-lg font-semibold text-center w-full sm:w-auto text-violet-800">
           {title}
         </h2>
 
