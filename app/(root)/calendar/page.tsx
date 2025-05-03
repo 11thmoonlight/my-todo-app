@@ -152,80 +152,95 @@ const Calendar = () => {
   };
 
   const [title, setTitle] = useState("");
+  const [currentView, setCurrentView] = useState("dayGridMonth");
 
-  const isMobile = useMediaQuery({ maxWidth: 640 });
-
-  const handleViewChange = (view: string) => {
-    const calendarApi = calendarRef.current?.getApi();
-    calendarApi?.changeView(view);
-    if (calendarApi) {
-      setTitle(calendarApi.view.title);
-    }
+  const handleViewChange = (view) => {
+    const api = calendarRef.current?.getApi();
+    api?.changeView(view);
+    setTitle(api?.view.title);
+    setCurrentView(view);
   };
+
+  useEffect(() => {
+    const api = calendarRef.current?.getApi();
+    api?.changeView("dayGridMonth");
+    setTitle(api?.view.title);
+    setCurrentView("dayGridMonth");
+  }, [calendarRef]);
 
   return (
     <div className="p-4 bg-violet-50 rounded-2xl shadow-lg max-w-full">
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center mb-4 flex-wrap gap-2">
+        <h2 className="text-2xl font-semibold text-center w-full sm:w-auto text-violet-800 flex gap-5 justify-center mb-4">
           <button
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.prev();
               setTitle(api?.view.title);
             }}
-            className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+            className="cursor-pointer text-2xl hover:scale-110 active:scale-95 transition-transform duration-300"
           >
             <FiChevronLeft />
           </button>
+          {title}
           <button
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.next();
               setTitle(api?.view.title);
             }}
-            className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+            className="cursor-pointer text-2xl hover:scale-110 active:scale-95 transition-transform duration-300"
           >
             <FiChevronRight />
           </button>
-        </div>
-
-        <h2 className="sm:text-2xl text-lg font-semibold text-center w-full sm:w-auto text-violet-800">
-          {title}
         </h2>
 
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrapp">
           <button
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.today();
               setTitle(api?.view.title);
             }}
-            className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+            className="bg-violet-200 text-sm font-semibold text-violet-900 px-3 py-2 rounded hover:bg-violet-300 hover:scale-105 active:scale-95 transition-transform duration-300"
           >
             Today
           </button>
-          {!isMobile && (
-            <>
-              <button
-                onClick={() => handleViewChange("dayGridMonth")}
-                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-              >
-                Month
-              </button>
-              <button
-                onClick={() => handleViewChange("timeGridWeek")}
-                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-              >
-                Week
-              </button>
-              <button
-                onClick={() => handleViewChange("timeGridDay")}
-                className="bg-gray-100 px-3 py-1 rounded hover:bg-gray-200"
-              >
-                Day
-              </button>
-            </>
-          )}
+
+          <div className="flex gap-2 bg-violet-300 p-1 rounded">
+            <button
+              onClick={() => handleViewChange("dayGridMonth")}
+              className={`text-sm font-semibold px-3 rounded-l-lg transition-transform duration-300 ${
+                currentView === "dayGridMonth"
+                  ? "bg-violet-600 text-white scale-95 border-2 border-violet-300 border-dashed"
+                  : "bg-violet-100 text-violet-900 hover:bg-violet-200 hover:scale-105 border-2 border-violet-300 border-dashed"
+              } active:scale-95`}
+            >
+              Month
+            </button>
+
+            <button
+              onClick={() => handleViewChange("timeGridWeek")}
+              className={`text-sm font-semibold px-3 transition-transform duration-300 ${
+                currentView === "timeGridWeek"
+                  ? "bg-violet-600 text-white scale-95 border-2 border-violet-300 border-dashed"
+                  : "bg-violet-100 text-violet-900 hover:bg-violet-200 hover:scale-105 border-2 border-violet-300 border-dashed"
+              } active:scale-95`}
+            >
+              Week
+            </button>
+
+            <button
+              onClick={() => handleViewChange("timeGridDay")}
+              className={`text-sm font-semibold px-3 rounded-r-lg transition-transform duration-300 ${
+                currentView === "timeGridDay"
+                  ? "bg-violet-600 text-white scale-95 border-2 border-violet-300 border-dashed"
+                  : "bg-violet-100 text-violet-900 hover:bg-violet-200 hover:scale-105 border-2 border-violet-300 border-dashed"
+              } active:scale-95`}
+            >
+              Day
+            </button>
+          </div>
         </div>
       </div>
       <FullCalendar

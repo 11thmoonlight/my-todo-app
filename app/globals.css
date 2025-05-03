@@ -228,7 +228,7 @@
 
 /* رزرو scroll محدود */
 .fc .fc-view-harness {
-  @apply overflow-scroll max-h-[80vh];
+  @apply overflow-y-auto max-h-[80vh];
 }
 
 /* خطوط جدول روز و ساعت */
