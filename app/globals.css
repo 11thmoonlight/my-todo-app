@@ -218,12 +218,12 @@
 
 /* جدول هدر (شنبه تا جمعه) */
 .fc .fc-col-header-cell-cushion {
-  @apply text-violet-700 font-semibold py-2 sm:text-base text-[10px];
+  @apply text-violet-700 font-semibold py-2 sm:text-base text-[12px];
 }
 
 /* جدول کلی تقویم */
 .fc .fc-scrollgrid {
-  @apply border border-violet-200 rounded;
+  @apply border border-violet-200 rounded text-xs text-violet-800 sm:text-base;
 }
 
 /* رزرو scroll محدود */
@@ -234,7 +234,7 @@
 /* خطوط جدول روز و ساعت */
 .fc .fc-daygrid-day,
 .fc .fc-timegrid-slot {
-  @apply border border-violet-200;
+  @apply border border-violet-200 text-xs text-violet-600 sm:text-base;
 }
 
 @layer base {

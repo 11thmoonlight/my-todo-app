@@ -171,7 +171,7 @@ const Calendar = () => {
   return (
     <div className="p-4 bg-violet-50 rounded-2xl shadow-lg max-w-full">
       <div className="flex sm:flex-row flex-col items-center sm:justify-between justify-center mb-4 flex-wrap gap-2">
-        <h2 className="text-2xl font-semibold text-center w-full sm:w-auto text-violet-800 flex gap-5 justify-center mb-4">
+        <h2 className="text-lg sm:text-2xl font-semibold text-center w-full sm:w-auto text-violet-800 flex gap-5 justify-center mb-4">
           <button
             onClick={() => {
               const api = calendarRef.current?.getApi();
