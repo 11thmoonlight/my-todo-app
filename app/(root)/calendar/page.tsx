@@ -50,26 +50,22 @@ type EventData = {
 };
 
 const colors = [
-  { value: "yellow", bgClass: "bg-yellow-500" },
-  { value: "red", bgClass: "bg-red-500" },
-  { value: "orange", bgClass: "bg-orange-500" },
-  { value: "amber", bgClass: "bg-amber-500" },
-  { value: "lime", bgClass: "bg-lime-500" },
-  { value: "green", bgClass: "bg-green-500" },
-  { value: "emerald", bgClass: "bg-emerald-500" },
-  { value: "teal", bgClass: "bg-teal-500" },
-  { value: "cyan", bgClass: "bg-cyan-500" },
-  { value: "sky", bgClass: "bg-sky-500" },
-  { value: "indigo", bgClass: "bg-indigo-500" },
-  { value: "violet", bgClass: "bg-violet-500" },
-  { value: "purple", bgClass: "bg-purple-500" },
-  { value: "fuchsia", bgClass: "bg-fuchsia-500" },
-  { value: "pink", bgClass: "bg-pink-500" },
-  { value: "rose", bgClass: "bg-rose-500" },
-  { value: "slate", bgClass: "bg-slate-500" },
-  { value: "zinc", bgClass: "bg-zinc-500" },
-  { value: "stone", bgClass: "bg-stone-500" },
-  { value: "neutral", bgClass: "bg-neutral-500" },
+  { value: "#fef1ab", bgClass: "bg-[#fef1ab]" },
+  { value: "#ffd7d7", bgClass: "bg-[#ffd7d7]" },
+  { value: "#ffcaa4", bgClass: "bg-[#ffcaa4]" },
+  { value: "#f2d9ef", bgClass: "bg-[#f2d9ef]" },
+  { value: "#d8eedf", bgClass: "bg-[#d8eedf]" },
+  { value: "#faf3eb", bgClass: "bg-[#faf3eb]" },
+  { value: "#dde4ed", bgClass: "bg-[#dde4ed]" },
+  { value: "#dbeeed", bgClass: "bg-[#dbeeed]" },
+  { value: "#e9edc9", bgClass: "bg-[#e9edc9]" },
+  { value: "#f9f7ff", bgClass: "bg-[#f9f7ff]" },
+  { value: "#fae3d9", bgClass: "bg-[#fae3d9]" },
+  { value: "#e0e3f4", bgClass: "bg-[#e0e3f4]" },
+  { value: "#fdd8cc", bgClass: "bg-[#fdd8cc]" },
+  { value: "#eccaff", bgClass: "bg-[#eccaff]" },
+  { value: "#ece7e1", bgClass: "bg-[#ece7e1]" },
+  { value: "#b8daed", bgClass: "bg-[#b8daed]" },
 ];
 
 const Calendar = () => {
@@ -87,6 +83,7 @@ const Calendar = () => {
       start: "",
       end: "",
       color: "#3788d8",
+      textColor: "#424242",
     },
   });
 
@@ -136,7 +133,10 @@ const Calendar = () => {
       const eventRef = doc(db, "users", userId, "events", editingEventId);
       await updateDoc(eventRef, values);
     } else {
-      await addDoc(collection(db, "users", userId, "events"), values);
+      await addDoc(collection(db, "users", userId, "events"), {
+        ...values,
+        textColor: "gray",
+      });
     }
     setOpen(false);
     setEditingEventId(null);
@@ -337,7 +337,7 @@ const Calendar = () => {
                             className="hidden peer"
                           />
                           <div
-                            className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
+                            className={`w-8 h-8 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
                           />
                         </Label>
                       ))}
