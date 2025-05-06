@@ -2,6 +2,7 @@
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -32,6 +33,7 @@ import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
 import { ListColorClasses } from "@/lib/ColorClasses";
+import { AiOutlineClose } from "react-icons/ai";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
@@ -64,6 +66,7 @@ export function TaskSheet({ task }: { task: Task }) {
   const { user } = useAuth();
   const userId = user?.uid;
   const [subtasks, setSubtasks] = useState(task.subtasks || []);
+  const [newSubtask, setNewSubtask] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -107,6 +110,13 @@ export function TaskSheet({ task }: { task: Task }) {
     }
   };
 
+  const handleAddSubtask = () => {
+    if (newSubtask.trim()) {
+      setSubtasks([{ title: newSubtask.trim(), done: false }, ...subtasks]);
+      setNewSubtask("");
+    }
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -114,7 +124,7 @@ export function TaskSheet({ task }: { task: Task }) {
           <IoChevronForwardOutline />
         </button>
       </SheetTrigger>
-      <SheetContent className="overflow-y-scroll">
+      <SheetContent className="overflow-y-scroll dark-scrollbar">
         <SheetHeader className="flex flex-col gap-4">
           <SheetTitle className="text-2xl font-bold text-violet-900">
             Task:
@@ -182,7 +192,7 @@ export function TaskSheet({ task }: { task: Task }) {
                               <SelectValue placeholder={task.list.title} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
                             {allLists.map((list) => (
                               <SelectItem
                                 key={list.id}
@@ -223,7 +233,7 @@ export function TaskSheet({ task }: { task: Task }) {
                               <SelectValue placeholder={task.tag.title} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
                             {allTags.map((tag) => (
                               <SelectItem
                                 key={tag.id}
@@ -281,22 +291,29 @@ export function TaskSheet({ task }: { task: Task }) {
                   <p className="text-2xl font-bold text-violet-900">
                     Subtasks:
                   </p>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setSubtasks([{ title: "", done: false }, ...subtasks])
-                    }
-                    className="flex items-center gap-2 cursor-pointer ml-4"
-                  >
-                    <IoMdAdd size={20} className="text-violet-500" />
-                    <span className="font-semibold text-violet-500 text-sm">
-                      Add New Subtask
-                    </span>
-                  </button>
+
+                  <div className="flex items-center gap-2 ml-4">
+                    <Input
+                      value={newSubtask}
+                      onChange={(e) => setNewSubtask(e.target.value)}
+                      placeholder="New Subtask"
+                      className="text-sm flex-1"
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleAddSubtask}
+                      className="bg-violet-300 text-violet-950 hover:bg-violet-200"
+                    >
+                      Add
+                    </Button>
+                  </div>
+
                   <Separator />
+
                   {subtasks.map((subtask, index) => (
                     <div key={index} className="flex items-center gap-2 ml-4">
                       <input
+                        className="w-4 h-4 accent-violet-300"
                         type="checkbox"
                         checked={subtask.done}
                         onChange={(e) => {
@@ -314,19 +331,33 @@ export function TaskSheet({ task }: { task: Task }) {
                         }}
                         className="flex-1 text-sm"
                       />
+                      <button
+                        onClick={() => {
+                          const updated = subtasks.filter(
+                            (_, i) => i !== index
+                          );
+                          setSubtasks(updated);
+                        }}
+                        className="text-red-500 hover:text-red-700 hover:scale-110 active:scale-100 cursor-pointer transition-transform duration-300"
+                        type="button"
+                      >
+                        <AiOutlineClose size={16} />
+                      </button>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="flex gap-2 justify-between mt-6">
-                <Button
-                  type="button"
-                  onClick={() => onDelete()}
-                  className="w-1/2 bg-white text-violet-900 border-violet-300 border-2 hover:bg-pink-50 hover:border-pink-100 active:scale-80 transition-transform duration-300"
-                >
-                  Delete
-                </Button>
+                <SheetClose asChild>
+                  <Button
+                    type="button"
+                    onClick={() => onDelete()}
+                    className="w-1/2 bg-pink-300 text-pink-950 hover:bg-pink-200 hover:border-pink-100 active:scale-80 transition-transform duration-300"
+                  >
+                    Delete
+                  </Button>
+                </SheetClose>
                 <Button
                   type="submit"
                   className="w-1/2 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-80 transition-transform duration-300"
