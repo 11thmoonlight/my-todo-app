@@ -134,7 +134,7 @@
 }
 
 .dark-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .dark-scrollbar::-webkit-scrollbar-track {
@@ -208,7 +208,7 @@
 /* ساعت و نام ایونت */
 .fc .fc-event-time,
 .fc .fc-event-title {
-  @apply sm:text-xs font-medium text-[8px];
+  @apply sm:text-xs font-medium text-[9px] overflow-hidden;
 }
 
 /* انتخاب زمان با موس (highlight) */
@@ -229,6 +229,10 @@
 /* رزرو scroll محدود */
 .fc .fc-view-harness {
   @apply overflow-y-auto max-h-[80vh];
+}
+
+.fc-daygrid-event-dot {
+  @apply mr-1;
 }
 
 /* خطوط جدول روز و ساعت */
