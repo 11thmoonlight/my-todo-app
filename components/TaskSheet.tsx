@@ -32,6 +32,7 @@ import { getTags } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
 import { ListColorClasses } from "@/lib/ColorClasses";
 import { AiOutlineClose } from "react-icons/ai";
+import { Textarea } from "./ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
@@ -140,7 +141,7 @@ export function TaskSheet({ task }: { task: Task }) {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="border-2 border-violet-100 px-4 py-2 rounded-md text-violet-400 font-semibold"
+                      className="border-2 border-violet-100 px-4 py-2 rounded-md text-violet-600 font-semibold"
                       placeholder="Task Title"
                       {...field}
                     />
@@ -156,18 +157,17 @@ export function TaskSheet({ task }: { task: Task }) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      className="px-4 py-2 border-2 border-violet-100 rounded-md min-h-[100px] text-sm text-violet-400 font-semibold"
-                      placeholder="Description"
+                    <Textarea
+                      placeholder="Description..."
                       {...field}
+                      className="focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[0px] h-[40px] overflow-y-auto dark-scrollbar text-violet-600"
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="flex justify-between bg-stone-50 p-4 rounded-lg mb-6">
+            <div className="flex justify-between bg-stone-50 p-2 rounded-lg mb-6">
               <div className="flex flex-col gap-8 text-violet-800 font-semibold">
                 <p>List</p>
                 <p>Tags</p>
@@ -285,7 +285,7 @@ export function TaskSheet({ task }: { task: Task }) {
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 mb-10">
               <div className="flex flex-col gap-4">
                 <p className="text-2xl font-bold text-violet-900">Subtasks:</p>
 
