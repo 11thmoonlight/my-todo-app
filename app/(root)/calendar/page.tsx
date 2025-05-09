@@ -37,8 +37,6 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-
-import { useMediaQuery } from "react-responsive";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 type EventData = {
@@ -247,11 +245,6 @@ const Calendar = () => {
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         headerToolbar={false}
-        // headerToolbar={{
-        //   left: "prev,next today",
-        //   center: "title",
-        //   right: "dayGridMonth,timeGridWeek,timeGridDay",
-        // }}
         events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
@@ -265,7 +258,7 @@ const Calendar = () => {
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] text-violet-900">
+        <DialogContent className="sm:max-w-[425px] max-w-[350px] text-violet-900 px-2 py-5 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-center font-bold text-xl mb-3">
               {editingEventId ? "Edit Event" : "Add Event"}
@@ -337,7 +330,7 @@ const Calendar = () => {
                             className="hidden peer"
                           />
                           <div
-                            className={`w-8 h-8 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
+                            className={`sm:w-8 sm:h-8 w-7 h-7 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
                           />
                         </Label>
                       ))}
@@ -346,7 +339,7 @@ const Calendar = () => {
                 )}
               />
 
-              <DialogFooter className="pt-2 flex justify-between gap-2">
+              <DialogFooter className="pt-2 flex justify-center gap-2 flex-row">
                 <Button
                   type="submit"
                   className={`mt-2 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-90 transition-transform duration-300 ${
