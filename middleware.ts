@@ -21,8 +21,8 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/task/:path*",
     "/upcoming/:path*",
-    "/today/:path*",
     "/calendar/:path*",
     "/sticky/:path*",
   ],
