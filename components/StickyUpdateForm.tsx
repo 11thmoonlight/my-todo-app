@@ -286,7 +286,7 @@ export default function StickyUpdateForm({ noteData }) {
               )}
             />
 
-            <DialogFooter className="flex items-center gap-2">
+            <DialogFooter className="flex flex-row items-center gap-2">
               <Button
                 type="submit"
                 className="w-1/2 bg-violet-300 text-violet-950 hover:bg-violet-200 hover:scale-105 active:scale-95 transition-transform duration-300"
