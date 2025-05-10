@@ -4,10 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin, {
-  DateClickArg,
-  EventClickArg,
-} from "@fullcalendar/interaction";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import { EventClickArg } from "@fullcalendar/core";
 import {
   addDoc,
   collection,
@@ -41,6 +39,13 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 type EventData = {
   id: string;
+  title: string;
+  start: string;
+  end: string;
+  color: string;
+};
+
+type FormData = {
   title: string;
   start: string;
   end: string;
@@ -125,7 +130,7 @@ const Calendar = () => {
     }
   };
 
-  const handleAddOrUpdateEvent = async (values: any) => {
+  const handleAddOrUpdateEvent = async (values: FormData) => {
     if (!userId) return;
     if (editingEventId) {
       const eventRef = doc(db, "users", userId, "events", editingEventId);
@@ -152,17 +157,17 @@ const Calendar = () => {
   const [title, setTitle] = useState("");
   const [currentView, setCurrentView] = useState("dayGridMonth");
 
-  const handleViewChange = (view) => {
+  const handleViewChange = (view: string) => {
     const api = calendarRef.current?.getApi();
     api?.changeView(view);
-    setTitle(api?.view.title);
+    setTitle(api?.view.title || "");
     setCurrentView(view);
   };
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
     api?.changeView("dayGridMonth");
-    setTitle(api?.view.title);
+    setTitle(api?.view.title || "");
     setCurrentView("dayGridMonth");
   }, [calendarRef]);
 
@@ -174,7 +179,7 @@ const Calendar = () => {
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.prev();
-              setTitle(api?.view.title);
+              setTitle(api?.view.title || "");
             }}
             className="cursor-pointer text-2xl hover:scale-110 active:scale-95 transition-transform duration-300"
           >
@@ -185,7 +190,7 @@ const Calendar = () => {
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.next();
-              setTitle(api?.view.title);
+              setTitle(api?.view.title || "");
             }}
             className="cursor-pointer text-2xl hover:scale-110 active:scale-95 transition-transform duration-300"
           >
@@ -198,7 +203,7 @@ const Calendar = () => {
             onClick={() => {
               const api = calendarRef.current?.getApi();
               api?.today();
-              setTitle(api?.view.title);
+              setTitle(api?.view.title || "");
             }}
             className="bg-violet-200 text-sm font-semibold text-violet-900 px-3 py-2 rounded hover:bg-violet-300 hover:scale-105 active:scale-95 transition-transform duration-300"
           >
@@ -255,6 +260,7 @@ const Calendar = () => {
         contentHeight="auto"
         expandRows={true}
         dayMaxEventRows={true}
+        eventDisplay="block"
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -342,7 +348,7 @@ const Calendar = () => {
               <DialogFooter className="pt-2 flex justify-center gap-2 flex-row">
                 <Button
                   type="submit"
-                  className={`mt-2 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-90 transition-transform duration-300 ${
+                  className={`mt-2 bg-violet-300 text-violet-950 hover:bg-violet-200 hover:scale-105 active:scale-90 transition-transform duration-300 ${
                     editingEventId ? "w-1/2" : "w-full"
                   }`}
                 >
@@ -352,7 +358,7 @@ const Calendar = () => {
                 {editingEventId && (
                   <Button
                     type="button"
-                    className="w-1/2 mt-2 bg-pink-300 text-pink-950 hover:bg-pink-200 active:scale-90 transition-transform duration-300"
+                    className="w-1/2 mt-2 bg-pink-300 text-pink-950 hover:bg-pink-200 hover:scale-105 active:scale-90 transition-transform duration-300"
                     onClick={handleDeleteEvent}
                   >
                     Delete Event
