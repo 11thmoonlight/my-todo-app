@@ -33,6 +33,18 @@ declare global {
     subtasks: Subtasks[];
     id: string;
   }
+
+  type StickySubType = {
+    title: string;
+  };
+
+  type StickyNote = {
+    id: string;
+    title: string;
+    description?: string;
+    color: string;
+    subs?: StickySubType[];
+  };
 }
 
 export {};
