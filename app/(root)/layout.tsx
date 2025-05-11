@@ -13,7 +13,7 @@ export default async function RootLayout({
       <AuthProvider>
         <SidebarProvider>
           <AppSidebar />
-          <div className="flex-1 mx-5">
+          <div className="flex-1 sm:mx-5 mx-1">
             <SidebarTrigger />
             {children}
           </div>
