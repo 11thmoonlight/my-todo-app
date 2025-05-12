@@ -64,9 +64,16 @@ const formSchema = z.object({
     .optional(),
 });
 
-export default function StickyUpdateForm({ noteData }) {
+interface StickyUpdateFormProps {
+  noteData: StickyNote;
+}
+
+export default function StickyUpdateForm({ noteData }: StickyUpdateFormProps) {
   const [subInput, setSubInput] = useState("");
   const [subs, setSubs] = useState(noteData?.subs || []);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,15 +87,13 @@ export default function StickyUpdateForm({ noteData }) {
   const { user } = useAuth();
   const userId = user?.uid;
 
-  console.log(noteData);
-  console.log(userId);
-
   const onEdit = async (values: z.infer<typeof formSchema>) => {
     try {
       await updateSticky(userId, noteData.id, {
         ...values,
         subs,
       });
+      setOpen(false);
     } catch (err) {
       console.error("Error updating sticky:", err);
     }
@@ -97,6 +102,7 @@ export default function StickyUpdateForm({ noteData }) {
   const onDelete = async () => {
     try {
       await deleteSticky(userId, noteData.id);
+      setOpen(false);
     } catch (err) {
       console.error("Error updating task:", err);
     }
@@ -108,9 +114,6 @@ export default function StickyUpdateForm({ noteData }) {
       setSubInput("");
     }
   };
-
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingText, setEditingText] = useState("");
 
   const handleDeleteSubtask = (index: number) => {
     setSubs((prev) => prev.filter((_, i) => i !== index));
@@ -134,7 +137,7 @@ export default function StickyUpdateForm({ noteData }) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button>
           <div className=" text-stone-800">
