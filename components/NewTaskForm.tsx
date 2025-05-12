@@ -40,17 +40,19 @@ const formSchema = z.object({
   title: z.string().min(1, "Required"),
   description: z.string().optional(),
   list: z.object({
-    title: z.string(),
-    color: z.string(),
+    title: z.string().min(1, "Required"),
+    color: z.string().min(1, "Required"),
   }),
   tag: z.object({
-    title: z.string(),
-    color: z.string(),
+    title: z.string().min(1, "Required"),
+    color: z.string().min(1, "Required"),
   }),
-  date: z.string().min(1, "Pick a date"),
-  time: z.string().min(1, "Pick a time"),
-  priority: z.enum(["low", "medium", "high"]),
-  done: z.boolean().optional(),
+  date: z.string().min(1, "Pick a date").min(10, "Pick a date"),
+  time: z.string().min(1, "Pick a time").min(5, "Pick a time"),
+  priority: z.enum(["low", "medium", "high"], {
+    required_error: "Select a priority",
+  }),
+  done: z.boolean(),
   subtasks: z
     .array(
       z.object({
@@ -66,6 +68,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [subtaskInput, setSubtaskInput] = useState("");
   const [subtasks, setSubtasks] = useState<Subtasks[]>([]);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -102,6 +105,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
       });
       form.reset();
       setSubtasks([]);
+      setOpen(false);
     } catch (err) {
       console.error("Error creating task:", err);
     }
@@ -142,14 +146,14 @@ export default function NewTaskForm({ userId }: { userId: string }) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 border-2 border-violet-200 p-4 rounded-md cursor-pointer hover:bg-violet-200 active:scale-95 transition-transform duration-300">
+        <button className="flex items-center gap-2 border-2 border-violet-200 p-4 rounded-md cursor-pointer hover:bg-violet-200 active:scale-95 transition-transform duration-300 text-[13px] sm:text-base">
           <IoMdAdd size={20} className="text-violet-500" />
           <span className="font-semibold text-violet-500">Add New Task</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] text-violet-900">
+      <DialogContent className="sm:max-w-[425px] max-w-[350px] text-violet-900 px-3 py-5 sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-center font-bold text-xl mb-3">
             Add new task
@@ -180,7 +184,11 @@ export default function NewTaskForm({ userId }: { userId: string }) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea placeholder="Description..." {...field} />
+                    <Textarea
+                      placeholder="Description..."
+                      {...field}
+                      className="focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[0px] h-[40px] overflow-y-auto dark-scrollbar"
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -198,11 +206,11 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                       }
                     >
                       <FormControl>
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full ">
                           <SelectValue placeholder="Choose a List" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
                         {lists.map((list) => (
                           <SelectItem
                             key={list.id}
@@ -243,7 +251,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                           <SelectValue placeholder="Choose a Tag" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
                         {tags.map((tag) => (
                           <SelectItem
                             key={tag.id}
@@ -325,7 +333,9 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             className="hidden"
                           />
                           <div className="flex items-center gap-2">
-                            <span className="capitalize">{level}</span>
+                            <span className="capitalize sm:text-base text-sm">
+                              {level}
+                            </span>
                             <IoIosFlag
                               className={`${
                                 level === "low"
@@ -380,7 +390,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             size="sm"
                             variant="outline"
                             onClick={handleSaveEdit}
-                            className="text-green-600"
+                            className="text-green-600 text-xs sm:text-sm"
                           >
                             Save
                           </Button>
@@ -392,7 +402,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                               setEditingIndex(null);
                               setEditingText("");
                             }}
-                            className="text-gray-500"
+                            className="text-gray-500 text-xs sm:text-sm"
                           >
                             Cancel
                           </Button>
@@ -404,7 +414,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             type="button"
                             size="sm"
                             onClick={() => handleEditSubtask(index)}
-                            className="text-teal-900 bg-teal-100 font-semibold shadow-lg hover:bg-teal-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                            className="text-teal-900 bg-teal-100 font-semibold shadow-lg hover:bg-teal-200 hover:scale-105 active:scale-95 transition-transform duration-300 text-xs sm:text-sm"
                           >
                             Edit
                           </Button>
@@ -412,7 +422,7 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                             type="button"
                             size="sm"
                             onClick={() => handleDeleteSubtask(index)}
-                            className="text-pink-900 bg-pink-100 shadow-lg hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300"
+                            className="text-pink-900 bg-pink-100 shadow-lg hover:bg-pink-200 hover:scale-105 active:scale-95 transition-transform duration-300 text-xs sm:text-sm"
                           >
                             <AiOutlineClose />
                           </Button>
