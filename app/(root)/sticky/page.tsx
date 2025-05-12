@@ -4,18 +4,9 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { Card, CardContent } from "@/components/ui/card";
-import { PiNotePencilThin } from "react-icons/pi";
 import { useAuth } from "@/context/AuthContext";
 import NewStickyForm from "@/components/NewStickyForm";
 import StickyUpdateForm from "@/components/StickyUpdateForm";
-
-type StickyNote = {
-  id: string;
-  title: string;
-  description?: string;
-  color: string;
-  subs?: string[];
-};
 
 export default function Sticky() {
   const [stickies, setStickies] = useState<StickyNote[]>([]);
@@ -43,7 +34,7 @@ export default function Sticky() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex flex-wrap gap-4 justify-center">
-        <NewStickyForm userId={userId} />
+        <NewStickyForm userId={userId || ""} />
         {stickies.map((note) => (
           <Card key={note.id} className={`bg-${note.color}-200`}>
             <CardContent className=" flex flex-col gap-2 h-[200px] overflow-y-auto glass-scrollbar w-[250px]">
@@ -51,10 +42,7 @@ export default function Sticky() {
                 <h2 className="font-semibold pb-2 text-lg text-stone-800">
                   {note.title}
                 </h2>
-                {/* <div className=" text-stone-800">
-                  <PiNotePencilThin size={20} className="cursor-pointer" />
-                </div> */}
-                <StickyUpdateForm noteData={note} userId={userId} />
+                <StickyUpdateForm noteData={note} />
               </div>
               <p className="text-sm text-stone-700">{note.description}</p>
               {note.subs && note.subs.length > 0 && (
