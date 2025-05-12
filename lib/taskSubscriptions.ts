@@ -62,11 +62,7 @@ export function subscribeToCategorizedTasks(
         id: doc.id,
         ...doc.data(),
       })) as Task[];
-      thisWeekTasks = raw.filter(
-        (task) =>
-          !todayTasks.some((t) => t.id === task.id) &&
-          !tomorrowTasks.some((t) => t.id === task.id)
-      );
+      thisWeekTasks = raw;
       onUpdate({ todayTasks, tomorrowTasks, thisWeekTasks });
     })
   );
