@@ -52,7 +52,7 @@ const colors = [
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
-  color: z.string(),
+  color: z.string().min(1, "Required"),
   description: z.string().optional(),
   subs: z
     .array(
@@ -65,7 +65,10 @@ const formSchema = z.object({
 
 export default function NewStickyForm({ userId }: { userId: string }) {
   const [subInput, setSubInput] = useState("");
-  const [subs, setSubs] = useState<[]>([]);
+  const [subs, setSubs] = useState<StickySubType[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -85,6 +88,7 @@ export default function NewStickyForm({ userId }: { userId: string }) {
       });
       form.reset();
       setSubs([]);
+      setOpen(false);
     } catch (err) {
       console.error("Error creating sticky:", err);
     }
@@ -96,9 +100,6 @@ export default function NewStickyForm({ userId }: { userId: string }) {
       setSubInput("");
     }
   };
-
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingText, setEditingText] = useState("");
 
   const handleDeleteSubtask = (index: number) => {
     setSubs((prev) => prev.filter((_, i) => i !== index));
@@ -122,13 +123,13 @@ export default function NewStickyForm({ userId }: { userId: string }) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button className="flex items-center justify-center gap-2 border-2 border-violet-200 p-4 rounded-xl cursor-pointer hover:bg-violet-100 active:scale-95 transition-transform duration-300 w-[250px] h-[250px]">
           <IoMdAdd size={60} className="text-violet-500" />
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] text-violet-900">
+      <DialogContent className="sm:max-w-[425px] text-violet-900 p-6">
         <DialogHeader>
           <DialogTitle className="text-center font-bold text-xl mb-3">
             Add new Sticky Note
