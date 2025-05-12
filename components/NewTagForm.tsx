@@ -43,8 +43,9 @@ export default function NewTagForm() {
   const { user } = useAuth();
   const [title, setTitle] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!title || !selectedColor || !user) return;
 
@@ -56,17 +57,18 @@ export default function NewTagForm() {
 
     setTitle("");
     setSelectedColor("");
+    setOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="w-fit">
-        <div className="flex gap-1 bg-gray-200 p-2 rounded-md text-xs">
+        <div className="flex gap-1 p-2 rounded-md text-xs">
           <IoMdAdd size={16} className="text-violet-500" />
           <span className="font-semibold">Add New Tag</span>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] text-violet-900">
+      <DialogContent className="sm:max-w-[425px] text-violet-900 py-5 sm:p-6 px-3">
         <DialogHeader>
           <DialogTitle className="text-center font-bold text-xl mb-3">
             Add New Tag
