@@ -264,7 +264,7 @@ export default function NewStickyForm({ userId }: { userId: string }) {
                           className="hidden peer"
                         />
                         <div
-                          className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
+                          className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-300`}
                         />
                       </Label>
                     ))}
