@@ -15,6 +15,10 @@ import { Button } from "./ui/button";
 import { IoMdAdd } from "react-icons/io";
 import { createTag } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 
 const colors = [
   { value: "yellow", bgClass: "bg-yellow-300" },
@@ -39,25 +43,33 @@ const colors = [
   { value: "neutral", bgClass: "bg-neutral-300" },
 ];
 
+const formSchema = z.object({
+  title: z.string().min(1, "Required"),
+  color: z.string().min(1, "Required"),
+});
+
 export default function NewTagForm() {
   const { user } = useAuth();
-  const [title, setTitle] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
   const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!title || !selectedColor || !user) return;
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      color: "",
+    },
+  });
 
-    await createTag(user.uid, {
-      title,
-      color: selectedColor,
-      createdAt: new Date(),
-    });
-
-    setTitle("");
-    setSelectedColor("");
-    setOpen(false);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await createTag(user?.uid, {
+        ...values,
+      });
+      form.reset();
+      setOpen(false);
+    } catch (err) {
+      console.error("Error creating list:", err);
+    }
   };
 
   return (
@@ -75,47 +87,63 @@ export default function NewTagForm() {
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <Input
-              id="title"
-              placeholder="Tag Title"
-              className="col-span-3"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4 py-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="flex flex-wrap gap-3 rtl:space-x-reverse items-center justify-center">
-            {colors.map((color) => (
-              <Label
-                key={color.value}
-                className="cursor-pointer hover:bg-yellow-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300 mb-2"
+            <div className="flex flex-wrap gap-3 rtl:space-x-reverse items-center justify-center">
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-wrap gap-3 rtl:space-x-reverse items-center justify-center ">
+                      {colors.map((color) => (
+                        <Label
+                          key={color.value}
+                          className="cursor-pointer hover:bg-yellow-100 hover:scale-105 rounded-lg active:scale-95 transition-all duration-300 mb-2"
+                        >
+                          <Input
+                            type="radio"
+                            value={color.value}
+                            checked={field.value === color.value}
+                            onChange={() => field.onChange(color.value)}
+                            className="hidden peer"
+                          />
+                          <div
+                            className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-300`}
+                          />
+                        </Label>
+                      ))}
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <DialogFooter>
+              <Button
+                type="submit"
+                className="w-full mt-6 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-80 transition-transform duration-300"
               >
-                <Input
-                  type="radio"
-                  name="priority"
-                  value={color.value}
-                  checked={selectedColor === color.value}
-                  onChange={() => setSelectedColor(color.value)}
-                  className="hidden peer"
-                />
-                <div
-                  className={`w-6 h-6 rounded-full border-2 border-white ${color.bgClass} peer-checked:ring-2 peer-checked:ring-violet-600`}
-                />
-              </Label>
-            ))}
-          </div>
-
-          <DialogFooter>
-            <Button
-              type="submit"
-              className="w-full mt-6 bg-violet-300 text-violet-950 hover:bg-violet-200 active:scale-80 transition-transform duration-300"
-            >
-              Add Tag
-            </Button>
-          </DialogFooter>
-        </form>
+                Add Tag
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
