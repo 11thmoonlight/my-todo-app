@@ -8,7 +8,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
@@ -19,11 +18,10 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import { ChevronDown } from "lucide-react";
-import { LuSettings } from "react-icons/lu";
 import { PiSignOutBold } from "react-icons/pi";
 import Link from "next/link";
 import { MdDoubleArrow } from "react-icons/md";
-import { FaListCheck } from "react-icons/fa6";
+import { LuListTodo } from "react-icons/lu";
 import { LuCalendarDays } from "react-icons/lu";
 import { LuStickyNote } from "react-icons/lu";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
@@ -31,62 +29,45 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import NewListForm from "./NewListForm";
 import NewTagForm from "./NewTagForm";
 import { useEffect, useState } from "react";
-import { getLists } from "@/services/listService";
+import { listenToLists } from "@/services/listService";
 
 import { useAuth } from "@/context/AuthContext";
-import { getTags } from "@/services/tagService";
+import { listenToTags } from "@/services/tagService";
 
 import { ListColorClasses, TagcolorClasses } from "@/lib/ColorClasses";
 
 export function AppSidebar() {
   const { user } = useAuth();
   const [lists, setLists] = useState<List[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    const fetchLists = async () => {
-      try {
-        const data = await getLists(user?.uid);
-        setLists(data as List[]);
-      } catch (error) {
-        console.error("Error fetching Lists:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user?.uid) return;
 
-    if (user?.uid) {
-      fetchLists();
-    }
+    const unsubscribe = listenToLists(user.uid, (data: List[]) => {
+      setLists(data);
+    });
+
+    return () => unsubscribe();
   }, [user?.uid]);
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const data = await getTags(user?.uid);
-        setTags(data as Tag[]);
-      } catch (error) {
-        console.error("Error fetching Tags:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user?.uid) return;
 
-    if (user?.uid) {
-      fetchTags();
-    }
+    const unsubscribe = listenToTags(user.uid, (data: Tag[]) => {
+      setTags(data);
+    });
+
+    return () => unsubscribe();
   }, [user?.uid]);
-
-  console.log(tags);
 
   return (
     <Sidebar>
       <SidebarHeader className="text-violet-900">
         <span className="font-semibold text-lg">Menu</span>
       </SidebarHeader>
-      <SidebarContent className="text-violet-900">
-        <SidebarMenu className="overflow-hidden">
+      <SidebarContent className="text-violet-900 ">
+        <SidebarMenu className="overflow-y-auto glass-scrollbar overflow-x-hidden">
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel asChild>
@@ -101,29 +82,23 @@ export function AppSidebar() {
                     <MdDoubleArrow />
                     <Link href="/upcoming">Upcoming</Link>
                   </SidebarMenuButton>
-                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
-                    4
-                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <FaListCheck />
-                    <Link href="today">Today</Link>
+                  <SidebarMenuButton className="flex gap-2">
+                    <LuListTodo />
+                    <Link href="/task">All Tasks</Link>
                   </SidebarMenuButton>
-                  <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
-                    4
-                  </SidebarMenuBadge>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
                     <LuCalendarDays />
-                    <Link href="calendar">Calendar</Link>
+                    <Link href="/calendar">Calendar</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
                     <LuStickyNote />
-                    <Link href="sticky">Sticky Wall</Link>
+                    <Link href="/sticky">Sticky Wall</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </CollapsibleContent>
@@ -144,7 +119,7 @@ export function AppSidebar() {
                 {lists.map((list) => (
                   <SidebarMenuItem key={list.id}>
                     <Link href={`/list/${encodeURIComponent(list.title)}`}>
-                      <SidebarMenuButton>
+                      <SidebarMenuButton className="cursor-pointer">
                         <div className="flex gap-2 items-center">
                           <MdOutlineCheckBoxOutlineBlank
                             className={`${
@@ -156,10 +131,6 @@ export function AppSidebar() {
                           <span>{list.title}</span>
                         </div>
                       </SidebarMenuButton>
-
-                      <SidebarMenuBadge className="text-violet-800 bg-violet-100 py-2 px-3">
-                        4
-                      </SidebarMenuBadge>
                     </Link>
                   </SidebarMenuItem>
                 ))}
@@ -188,6 +159,7 @@ export function AppSidebar() {
                   <Link
                     href={`/tag/${encodeURIComponent(tag.title)}`}
                     key={tag.id}
+                    className="cursor-pointer"
                   >
                     <div
                       className={`py-1 px-3 ${
@@ -211,10 +183,6 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4 text-violet-900">
-        <button className="flex gap-2 items-center">
-          <LuSettings />
-          <span>Setteings</span>
-        </button>
         <button className="flex gap-2 items-center">
           <PiSignOutBold />
           <span>Sign Out</span>
