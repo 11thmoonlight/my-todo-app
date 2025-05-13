@@ -9,31 +9,29 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { PiCalendarXFill } from "react-icons/pi";
 import NewTaskForm from "@/components/NewTaskForm";
 import { subscribeToListTasks } from "@/lib/subscribeToListTasks";
+import { use } from "react";
 
-interface ListPageProps {
-  params: { listTitle: string };
-}
-
-export default function ListPage({ params }: ListPageProps) {
+export default function ListPage({
+  params,
+}: {
+  params: Promise<{ listTitle: string }>;
+}) {
   const { user } = useAuth();
   const [listTasks, setListTasks] = useState<Task[]>([]);
+  const { listTitle } = use(params);
 
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = subscribeToListTasks(
-      user.uid,
-      params.listTitle,
-      setListTasks
-    );
+    const unsubscribe = subscribeToListTasks(user.uid, listTitle, setListTasks);
 
-    return () => unsubscribe(); // cleanup
-  }, [user, params.listTitle]);
+    return () => unsubscribe();
+  }, [user, listTitle]);
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
       <div className="flex gap-6 items-center">
-        <p className="text-4xl font-bold">{params.listTitle}</p>
+        <p className="text-4xl font-bold">{listTitle}</p>
         <p className="text-2xl font-semibold px-2 py-1 border-2 border-violet-50 rounded-md">
           {listTasks.length}
         </p>
@@ -83,7 +81,9 @@ export default function ListPage({ params }: ListPageProps) {
             </div>
           ))
         ) : (
-          <p>No tasks found for this list.</p>
+          <p className="flex items-center justify-center font-semibold sm:text-xl text-base h-32">
+            No tasks found for this list.
+          </p>
         )}
       </div>
     </div>
