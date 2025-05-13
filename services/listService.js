@@ -6,6 +6,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 export const createList = async (userId, listData) => {
@@ -26,4 +27,13 @@ export const updateList = async (userId, listId, newData) => {
 export const deleteList = async (userId, listId) => {
   const listRef = doc(db, "users", userId, "lists", listId);
   await deleteDoc(listRef);
+};
+
+export const listenToLists = (userId, callback) => {
+  const ref = collection(db, "users", userId, "lists");
+  const unsubscribe = onSnapshot(ref, (snapshot) => {
+    const lists = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(lists);
+  });
+  return unsubscribe;
 };
