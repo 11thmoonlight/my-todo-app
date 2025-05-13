@@ -6,6 +6,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 export const createTag = async (userId, tagData) => {
@@ -26,4 +27,13 @@ export const updateTag = async (userId, tagId, newData) => {
 export const deleteTag = async (userId, tagId) => {
   const tagRef = doc(db, "users", userId, "tags", tagId);
   await deleteDoc(tagRef);
+};
+
+export const listenToTags = (userId, callback) => {
+  const ref = collection(db, "users", userId, "tags");
+  const unsubscribe = onSnapshot(ref, (snapshot) => {
+    const tags = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(tags);
+  });
+  return unsubscribe;
 };
