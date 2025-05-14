@@ -191,7 +191,14 @@ export function TaskSheet({ task }: { task: Task }) {
                             <SelectValue placeholder={task.list.title} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
+                        <SelectContent
+                          className="max-h-52 overflow-y-auto dark-scrollbar"
+                          style={{
+                            height: "auto",
+                            minHeight: "auto",
+                            maxHeight: "13rem",
+                          }}
+                        >
                           {allLists.map((list) => (
                             <SelectItem
                               key={list.id}
@@ -232,7 +239,14 @@ export function TaskSheet({ task }: { task: Task }) {
                             <SelectValue placeholder={task.tag.title} />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
+                        <SelectContent
+                          className="max-h-52 overflow-y-auto dark-scrollbar"
+                          style={{
+                            height: "auto",
+                            minHeight: "auto",
+                            maxHeight: "13rem",
+                          }}
+                        >
                           {allTags.map((tag) => (
                             <SelectItem
                               key={tag.id}
