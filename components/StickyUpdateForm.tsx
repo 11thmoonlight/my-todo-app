@@ -25,8 +25,8 @@ import {
 import { deleteSticky, updateSticky } from "@/services/stickyServices";
 import { AiOutlineClose } from "react-icons/ai";
 import { Label } from "./ui/label";
-import { PiNotePencilThin } from "react-icons/pi";
 import { useAuth } from "@/context/AuthContext";
+import { MdEditNote } from "react-icons/md";
 
 const colors = [
   { value: "yellow", bgClass: "bg-yellow-200" },
@@ -104,7 +104,7 @@ export default function StickyUpdateForm({ noteData }: StickyUpdateFormProps) {
       await deleteSticky(userId, noteData.id);
       setOpen(false);
     } catch (err) {
-      console.error("Error updating task:", err);
+      console.error("Error deleting note:", err);
     }
   };
 
@@ -141,7 +141,7 @@ export default function StickyUpdateForm({ noteData }: StickyUpdateFormProps) {
       <DialogTrigger asChild>
         <button>
           <div className=" text-stone-800">
-            <PiNotePencilThin size={20} className="cursor-pointer" />
+            <MdEditNote size={22} className="cursor-pointer" />
           </div>
         </button>
       </DialogTrigger>
