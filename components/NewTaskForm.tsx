@@ -210,7 +210,14 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                           <SelectValue placeholder="Choose a List" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
+                      <SelectContent
+                        className="max-h-52 overflow-y-auto dark-scrollbar"
+                        style={{
+                          height: "auto",
+                          minHeight: "auto",
+                          maxHeight: "13rem",
+                        }}
+                      >
                         {lists.map((list) => (
                           <SelectItem
                             key={list.id}
@@ -251,7 +258,14 @@ export default function NewTaskForm({ userId }: { userId: string }) {
                           <SelectValue placeholder="Choose a Tag" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="h-52 overflow-y-auto dark-scrollbar">
+                      <SelectContent
+                        className="max-h-52 overflow-y-auto dark-scrollbar"
+                        style={{
+                          height: "auto",
+                          minHeight: "auto",
+                          maxHeight: "13rem",
+                        }}
+                      >
                         {tags.map((tag) => (
                           <SelectItem
                             key={tag.id}
