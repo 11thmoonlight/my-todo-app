@@ -77,6 +77,7 @@ const Calendar = () => {
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const calendarRef = useRef<FullCalendar | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const userId = user?.uid;
 
@@ -99,6 +100,7 @@ const Calendar = () => {
       ...doc.data(),
     })) as EventData[];
     setEvents(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -170,6 +172,14 @@ const Calendar = () => {
     setTitle(api?.view.title || "");
     setCurrentView("dayGridMonth");
   }, [calendarRef]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 bg-violet-50 rounded-2xl shadow-lg max-w-full">
