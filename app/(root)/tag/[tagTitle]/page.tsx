@@ -18,23 +18,42 @@ export default function TagPage({
   const { user } = useAuth();
   const [tagTasks, setTagTasks] = useState<Task[]>([]);
   const { tagTitle } = use(params);
+  const [loading, setLoading] = useState(true);
+  const decodedTagTitle = decodeURIComponent(tagTitle);
 
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = subscribeToTagTasks(user.uid, tagTitle, setTagTasks);
+    const unsubscribeTasks = subscribeToTagTasks(
+      user.uid,
+      tagTitle,
+      setTagTasks
+    );
 
-    return () => unsubscribe();
-  }, [user, tagTitle]);
+    setLoading(false);
+
+    return () => {
+      unsubscribeTasks();
+    };
+  }, [user, tagTitle, decodedTagTitle]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
       <div className="flex gap-6 items-center">
-        <p className="text-4xl font-bold">{tagTitle}</p>
+        <p className="text-4xl font-bold">{decodedTagTitle}</p>
         <p className="text-2xl font-semibold px-2 py-1 border-2 border-violet-50 rounded-md">
           {tagTasks.length}
         </p>
       </div>
+
       <div className="flex flex-col gap-6 border-2 border-violet-100 rounded-md bg-violet-50 p-4">
         {user && <NewTaskForm userId={user?.uid} />}
         {tagTasks.length > 0 ? (

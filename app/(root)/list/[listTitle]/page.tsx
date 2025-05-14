@@ -19,19 +19,30 @@ export default function ListPage({
   const { user } = useAuth();
   const [listTasks, setListTasks] = useState<Task[]>([]);
   const { listTitle } = use(params);
+  const [loading, setLoading] = useState(true);
+  const decodedListTitle = decodeURIComponent(listTitle);
 
   useEffect(() => {
     if (!user) return;
 
     const unsubscribe = subscribeToListTasks(user.uid, listTitle, setListTasks);
+    setLoading(false);
 
     return () => unsubscribe();
   }, [user, listTitle]);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
       <div className="flex gap-6 items-center">
-        <p className="text-4xl font-bold">{listTitle}</p>
+        <p className="text-4xl font-bold">{decodedListTitle}</p>
         <p className="text-2xl font-semibold px-2 py-1 border-2 border-violet-50 rounded-md">
           {listTasks.length}
         </p>
