@@ -34,7 +34,7 @@ import { createTask } from "@/services/taskService";
 import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
 import { AiOutlineClose } from "react-icons/ai";
-import { ListColorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses } from "@/lib/colorClasses";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required"),
