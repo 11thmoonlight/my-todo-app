@@ -12,6 +12,7 @@ export default function Sticky() {
   const [stickies, setStickies] = useState<StickyNote[]>([]);
   const { user } = useAuth();
   const userId = user?.uid;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!userId) return;
@@ -24,12 +25,19 @@ export default function Sticky() {
         ...doc.data(),
       })) as StickyNote[];
       setStickies(notes);
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, [userId]);
 
-  console.log(stickies);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 space-y-4">
