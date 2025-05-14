@@ -34,7 +34,7 @@ import { listenToLists } from "@/services/listService";
 import { useAuth } from "@/context/AuthContext";
 import { listenToTags } from "@/services/tagService";
 
-import { ListColorClasses, TagcolorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses, TagcolorClasses } from "@/lib/colorClasses";
 
 export function AppSidebar() {
   const { user } = useAuth();

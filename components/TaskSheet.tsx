@@ -30,7 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getLists } from "@/services/listService";
 import { getTags } from "@/services/tagService";
 import { useAuth } from "@/context/AuthContext";
-import { ListColorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses } from "@/lib/colorClasses";
 import { AiOutlineClose } from "react-icons/ai";
 import { Textarea } from "./ui/textarea";
 

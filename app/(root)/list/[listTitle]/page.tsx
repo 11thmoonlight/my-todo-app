@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { TaskSheet } from "@/components/TaskSheet";
 import { Separator } from "@/components/ui/separator";
-import { ListColorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses } from "@/lib/colorClasses";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { PiCalendarXFill } from "react-icons/pi";
 import NewTaskForm from "@/components/NewTaskForm";

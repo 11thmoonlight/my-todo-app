@@ -3,7 +3,7 @@ import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { PiCalendarXFill } from "react-icons/pi";
 import { Separator } from "@/components/ui/separator";
 import { TaskSheet } from "@/components/TaskSheet";
-import { ListColorClasses } from "@/lib/ColorClasses";
+import { ListColorClasses } from "@/lib/colorClasses";
 import NewTaskForm from "@/components/NewTaskForm";
 import { useState } from "react";
 import { updateTask } from "@/services/taskService";
