@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 
 import { useAuth } from "@/context/AuthContext";
-
 import { subscribeToCategorizedTasks } from "@/lib/taskSubscriptions";
 import TaskCard from "@/components/TaskCard";
 
 export default function Upcoming() {
   const { user } = useAuth();
   const userId = user?.uid;
+  const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState<{
     todayTasks: Task[];
     tomorrowTasks: Task[];
@@ -23,9 +23,24 @@ export default function Upcoming() {
   useEffect(() => {
     if (!user?.uid) return;
 
-    const unsubscribe = subscribeToCategorizedTasks(user.uid, setTasks);
+    const unsubscribe = subscribeToCategorizedTasks(
+      user.uid,
+      (fetchedTasks) => {
+        setTasks(fetchedTasks);
+        setLoading(false);
+      }
+    );
+
     return () => unsubscribe();
   }, [user?.uid]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
