@@ -20,10 +20,12 @@ export default function TaskPage() {
   const { user } = useAuth();
   const { tasks, listenToTasks, stopListening } = useTaskStore();
   const [updatingTaskIds, setUpdatingTaskIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user?.uid) return;
     listenToTasks(user?.uid);
+    setLoading(false);
     return () => stopListening();
   }, [user?.uid]);
 
@@ -72,6 +74,14 @@ export default function TaskPage() {
       setUpdatingTaskIds((prev) => prev.filter((id) => id !== task.id));
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-2 flex flex-col gap-6 text-violet-900 mb-6">
